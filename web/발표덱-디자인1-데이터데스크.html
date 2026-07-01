@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>예산 의사결정 메모 · DA 공통 발표덱</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ===========================================
+   FIXED 16:9 STAGE: MANDATORY BASE STYLES (viewport-base.css)
+   =========================================== */
+html,body{width:100%;height:100%;margin:0;overflow:hidden;background:var(--stage-bg,#141d2b)}
+.deck-viewport{position:fixed;inset:0;overflow:hidden;background:var(--stage-bg,#141d2b)}
+.deck-stage{position:absolute;left:0;top:0;width:1920px;height:1080px;overflow:hidden;transform-origin:0 0;background:var(--slide-bg,#1e2a3d)}
+.slide{position:absolute;inset:0;width:1920px;height:1080px;overflow:hidden;display:block;visibility:hidden;opacity:0;pointer-events:none;background:var(--slide-bg,#1e2a3d)}
+.slide.active,.slide.visible{visibility:visible;opacity:1;pointer-events:auto;z-index:1}
+img,video,canvas,svg{max-width:100%;max-height:100%}
+.deck-controls{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:1000}
+@media print{
+  html,body{width:1920px;height:auto;overflow:visible;background:#fff}
+  .deck-viewport{position:static;overflow:visible;background:#fff}
+  .deck-stage{position:static;width:auto;height:auto;transform:none!important;background:none}
+  .slide{position:relative;display:block!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important;width:1920px;height:1080px;break-after:page;page-break-after:always}
+  .slide:last-child{break-after:auto;page-break-after:auto}
+  .deck-controls{display:none!important}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.2s!important}}
+
+/* === DESIGN SYSTEM: DATA DESK === */
+:root{
+  --bg:#141d2b; --panel:#243349; --panel2:#2b3c55; --line:#3a4c68;
+  --ink:#eef3fa; --dim:#adbbd4; --faint:#8093ae;
+  --amber:#ffb63d; --up:#3ad07f; --dn:#ff6b6b; --blue:#6bb6ff;
+  --mono:'JetBrains Mono',monospace; --sans:'Space Grotesk',sans-serif;
+}
+.slide{color:var(--ink);font-family:var(--sans)}
+.gridbg{position:absolute;inset:0;background-image:linear-gradient(#2c3e59 1px,transparent 1px),linear-gradient(90deg,#2c3e59 1px,transparent 1px);background-size:64px 64px;opacity:.4}
+.glow{position:absolute;width:900px;height:900px;border-radius:50%;filter:blur(120px);opacity:.12;background:var(--amber);pointer-events:none}
+
+/* ticker bar */
+.ticker{position:absolute;top:0;left:0;right:0;height:56px;display:flex;align-items:center;gap:38px;padding:0 64px;
+  font-family:var(--mono);font-size:19px;border-bottom:1px solid var(--line);background:#18222fee;z-index:3}
+.ticker .up{color:var(--up)} .ticker .dn{color:var(--dn)} .ticker .d{color:var(--faint)}
+
+/* slide chrome */
+.head{position:absolute;top:96px;left:96px;right:96px}
+.eyebrow{font-family:var(--mono);color:var(--amber);font-size:20px;letter-spacing:5px;margin-bottom:14px}
+.title{font-size:66px;font-weight:700;letter-spacing:-1.5px;line-height:1.05;margin:0}
+.pageno{position:absolute;bottom:44px;right:64px;font-family:var(--mono);font-size:17px;color:var(--faint)}
+.foot{position:absolute;bottom:44px;left:96px;font-family:var(--mono);font-size:17px;color:var(--faint)}
+
+.body{position:absolute;left:96px;right:96px;top:250px;bottom:110px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:30px 34px}
+.panel .lbl{font-family:var(--mono);font-size:17px;letter-spacing:2px;color:var(--faint);margin-bottom:16px;text-transform:uppercase}
+.panel.amber{border-color:#6b501c;background:linear-gradient(180deg,#3a2f14,#243349)}
+.panel.amber .lbl{color:var(--amber)}
+p{margin:0;line-height:1.6}
+.big{font-size:27px;font-weight:500}
+.mid{font-size:23px;color:#c4d0e6}
+.sm{font-size:20px;color:var(--dim)}
+
+/* number tape */
+.tape{display:flex;gap:0}
+.tape .cell{flex:1;padding:0 30px}
+.tape .cell+.cell{border-left:1px solid var(--line)}
+.tape .n{font-family:var(--mono);font-size:60px;font-weight:800;letter-spacing:-1px}
+.tape .n.amber{color:var(--amber)} .tape .n.up{color:var(--up)} .tape .n.dn{color:var(--dn)}
+.tape .k{font-size:19px;color:var(--dim);margin-top:8px}
+
+/* data table */
+table{width:100%;border-collapse:collapse;font-size:22px}
+th,td{padding:14px 18px;text-align:left;border-bottom:1px solid var(--line)}
+th{font-family:var(--mono);font-size:16px;letter-spacing:1px;color:var(--faint);text-transform:uppercase}
+td.num,th.num{text-align:right;font-family:var(--mono)}
+tr.flag td{background:#3d2626}
+.tag{font-family:var(--mono);font-size:15px;font-weight:700;padding:3px 10px;border-radius:6px}
+.tag.dn{background:#4a2526;color:#ff9a9a} .tag.up{background:#1d3d2b;color:#7ee6a8} .tag.d{background:#2c3a52;color:var(--dim)}
+
+/* flow */
+.flow{display:flex;align-items:stretch;gap:0}
+.step{flex:1;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;text-align:center;display:flex;flex-direction:column;justify-content:center}
+.step .s{font-family:var(--mono);font-size:16px;color:var(--amber);margin-bottom:8px}
+.step .t{font-size:19px;line-height:1.4;color:#cdd8ec}
+.arrow{display:flex;align-items:center;color:var(--faint);font-family:var(--mono);font-size:28px;padding:0 8px}
+
+.two{display:grid;grid-template-columns:1fr 1fr;gap:24px;height:100%}
+.three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:22px;height:100%}
+.col{display:flex;flex-direction:column;gap:22px}
+.chip{display:inline-block;font-family:var(--mono);font-size:16px;padding:5px 12px;border-radius:20px;border:1px solid var(--line);color:var(--dim);margin:0 6px 8px 0}
+
+/* cover */
+.cover-kick{position:absolute;top:120px;left:120px;display:flex;align-items:center;gap:16px}
+.cover-kick .sq{width:16px;height:16px;background:var(--amber);border-radius:4px}
+.cover-kick span{font-family:var(--mono);font-size:22px;letter-spacing:6px;color:var(--amber)}
+.cover-wrap{position:absolute;left:120px;top:340px;right:120px}
+.cover-sub{font-size:30px;color:var(--dim);margin-bottom:26px}
+.cover-h{font-size:118px;font-weight:700;line-height:1.0;letter-spacing:-3px;margin:0}
+.cover-h .hl{color:var(--amber)}
+.cover-lead{font-size:30px;color:#a7b6d3;margin-top:36px;max-width:1180px;line-height:1.45}
+.cover-foot{position:absolute;bottom:100px;left:120px;right:120px;border-top:1px solid var(--line);padding-top:28px;display:flex;justify-content:space-between;font-family:var(--mono);font-size:20px;color:var(--faint)}
+.cursor{display:inline-block;width:24px;height:82px;background:var(--amber);margin-left:12px;vertical-align:-10px;animation:bl 1.1s steps(2) infinite}
+@keyframes bl{50%{opacity:0}}
+
+/* closing */
+.close{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center}
+.close h1{font-size:84px;font-weight:700;letter-spacing:-2px;margin:0 0 28px;line-height:1.08}
+.close h1 .hl{color:var(--amber)}
+.close p{font-size:27px;color:var(--dim);max-width:1240px;line-height:1.6;margin:0 0 14px}
+
+.reveal{opacity:0;transform:translateY(22px)}
+.active .reveal{animation:rise .6s cubic-bezier(.2,.7,.3,1) forwards}
+.active .reveal:nth-child(2){animation-delay:.08s}
+.active .reveal:nth-child(3){animation-delay:.16s}
+.active .reveal:nth-child(4){animation-delay:.24s}
+.active .reveal:nth-child(5){animation-delay:.32s}
+@keyframes rise{to{opacity:1;transform:none}}
+
+/* controls */
+.deck-controls{display:flex;gap:8px;background:#0b1220cc;border:1px solid var(--line);border-radius:40px;padding:8px 16px;font-family:var(--mono);font-size:15px;color:var(--dim);align-items:center}
+.deck-controls button{background:none;border:none;color:var(--ink);font-size:18px;cursor:pointer;padding:2px 8px}
+</style>
+</head>
+<body>
+<div class="deck-viewport">
+<div class="deck-stage" id="stage">
+
+<section class="slide active">
+  <div class="gridbg"></div><div class="glow" style="top:-300px;right:-200px"></div>
+  <div class="cover-kick"><span class="sq"></span><span>DA 공통 · 예산 의사결정 메모</span></div>
+  <div class="cover-wrap">
+    <div class="cover-sub reveal">마케팅 성과 CSV → 경영진 예산 결정</div>
+    <h1 class="cover-h reveal">다음 주 예산,<br>메타에서 <span class="hl">이메일로</span> 재배분<span class="cursor"></span></h1>
+    <p class="cover-lead reveal">8주 5개 채널 성과를 의사결정용 결론으로 전환. 증액·중단 채널과 이동 금액까지 제시.</p>
+  </div>
+  <div class="cover-foot"><span>2026.05.26 · 팀스파르타 AX 해커톤</span><span>계산 Python / 해석 Claude · CSV 재검증 완료</span></div>
+</section>
+
+<section class="slide">
+  <div class="ticker"><span class="d">MKT_PERF · W1–W8</span><span>이메일 <span class="up">ROI 1042% ▲</span></span><span>메타 <span class="dn">ROI 259% ▼</span></span><span>네이버 <span class="up">659%</span></span><span>오가닉 <span class="d">측정불가</span></span><span class="d">CSV_VERIFIED ✓</span></div>
+  <div class="head"><div class="eyebrow">EXECUTIVE SUMMARY</div><h2 class="title">한 장 요약</h2></div>
+  <div class="body">
+    <div class="two">
+      <div class="col">
+        <div class="panel reveal"><div class="lbl">받은 문제 (원문)</div><p class="mid">8주간 5개 채널 마케팅 성과 CSV로, 경영진이 예산 판단에 쓸 비즈니스 인사이트 리포트를 만들 것.</p></div>
+        <div class="panel amber reveal"><div class="lbl">만든 것 (한 문장)</div><p class="big">성과 CSV를 넣으면 채널 ROI 순위·급변 이슈·예산 재배분안까지 자동으로 뽑는, 추가 분석 없이 결재 가능한 결정 리포트.</p></div>
+        <div class="panel reveal"><div class="lbl">재현 (데모 대체)</div><p class="sm">명령 1회 실행으로 리포트·계산값 재생성. 재실행으로 수치 일치 확인. <span style="font-family:var(--mono);color:var(--blue)">python generate_insight_report.py</span></p></div>
+      </div>
+      <div class="col">
+        <div class="panel amber reveal" style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center">
+          <div class="lbl">핵심 임팩트</div>
+          <div style="font-family:var(--mono);font-size:96px;font-weight:800;color:var(--amber);line-height:1">+1,876만원</div>
+          <p class="mid" style="margin-top:14px">메타 초과분 319만원을 이메일로 옮길 때 기대 추가매출 (기준 시나리오)</p>
+        </div>
+        <div class="panel reveal">
+          <div class="lbl">한눈에</div>
+          <div class="tape">
+            <div class="cell"><div class="n amber">4.03×</div><div class="k">이메일 ÷ 메타 ROI</div></div>
+            <div class="cell"><div class="n">1분</div><div class="k">리포트 작성 (반나절→)</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">DA 공통 · 예산 의사결정 메모</div><div class="pageno">01/ 07</div>
+</section>
+
+<section class="slide">
+  <div class="head"><div class="eyebrow">PROBLEM DEFINITION</div><h2 class="title">문제 이해</h2></div>
+  <div class="body">
+    <div class="two" style="grid-template-rows:1fr 1fr">
+      <div class="panel reveal"><div class="lbl">기업 원문 문제</div><p class="mid">5개 채널 성과 데이터 기반 마케팅 인사이트 리포트 작성 요구. 포함 항목은 미지정.</p></div>
+      <div class="panel amber reveal"><div class="lbl">재정의한 문제</div><p class="mid">핵심 페인포인트는 리포트 부재가 아니라, <b style="color:#fff">데이터는 있으나 '다음 주 예산 배분' 답이 도출되지 않는 점.</b> 리포트가 아닌 예산 결정 도구로 재정의.</p></div>
+      <div class="panel reveal"><div class="lbl">문제의 크기 (Before)</div><p class="mid">매주 5개 채널 성과를 수작업 추출·계산·요약, 반나절 소요. 엑셀 수식은 오류 검증 불가, 결과물은 수치 나열로 의사결정 미연결.</p></div>
+      <div class="panel reveal"><div class="lbl">스코프 · 푼 것 / 안 푼 것</div><p class="sm"><b style="color:var(--up)">푼 것</b> 채널 ROI·이슈·재배분안·재현 파이프라인. &nbsp; <b style="color:var(--dn)">안 푼 것</b> 크로스채널 어트리뷰션, 실시간 연동, 자동 발송. 데이터 범위 밖으로 의도적 제외.</p></div>
+    </div>
+  </div>
+  <div class="foot">DA 공통 · 예산 의사결정 메모</div><div class="pageno">02/ 07</div>
+</section>
+
+<section class="slide">
+  <div class="head"><div class="eyebrow">APPROACH & DECISION</div><h2 class="title">해결 접근 &amp; 의사결정</h2></div>
+  <div class="body">
+    <div class="col reveal" style="gap:20px;height:100%">
+      <div class="panel"><div class="lbl">핵심 흐름 · 질문 하나를 가설 네 개로</div>
+        <div class="flow">
+          <div class="step"><div class="s">Q</div><div class="t">어느 채널로<br>옮기나</div></div>
+          <div class="arrow">→</div>
+          <div class="step"><div class="s">H1</div><div class="t">효율 격차가<br>충분히 큰가</div></div>
+          <div class="arrow">→</div>
+          <div class="step"><div class="s">H2</div><div class="t">업계 대비<br>잘하는 건가</div></div>
+          <div class="arrow">→</div>
+          <div class="step"><div class="s">H3</div><div class="t">최근 새는<br>돈이 있나</div></div>
+          <div class="arrow">→</div>
+          <div class="step"><div class="s">H4</div><div class="t">숫자를<br>믿어도 되나</div></div>
+        </div>
+      </div>
+      <div class="two" style="flex:1">
+        <div class="panel"><div class="lbl">버린 대안 &amp; 이유</div><p class="sm">계산의 LLM 위임안 미채택: 280행 합계·소수점 오류 및 재현 불가. 결측 0 대체안 미채택: 수집 누락을 0 성과로 처리 시 합계 왜곡.</p></div>
+        <div class="panel amber"><div class="lbl">★ 막혔던 지점 &amp; 돌파</div><p class="sm">이메일 1건 매출이 평균의 9.6배. 포함 시 이메일 순위 과대·전체 순위 왜곡. 삭제가 아닌 '제외 후 명시'로 처리, 신뢰성·투명성 동시 확보.</p></div>
+      </div>
+      <div class="panel"><div class="lbl">AI vs 내 판단</div><p class="sm">계산·집계는 Python 전담(재현·정확). 이슈 선정·예산 이동·이상치 처리 기준은 분석자 판단.</p></div>
+    </div>
+  </div>
+  <div class="foot">DA 공통 · 예산 의사결정 메모</div><div class="pageno">03/ 07</div>
+</section>
+
+<section class="slide">
+  <div class="head"><div class="eyebrow">OUTPUT & EVIDENCE</div><h2 class="title">근거 · 검증한 세 가지</h2></div>
+  <div class="body">
+    <div class="three">
+      <div class="panel reveal"><div class="lbl">01 · 예산이 효율과 반대 배분</div>
+        <p class="sm" style="margin-bottom:18px">효율 최하 메타에 예산 2순위 투입, 손실 발생.</p>
+        <div class="tape" style="flex-direction:column;gap:16px">
+          <div class="cell" style="padding:0"><div class="n dn" style="font-size:40px">26% → 7.8%</div><div class="k">메타 광고비 비중 → 매출 비중</div></div>
+          <div class="cell" style="padding:16px 0 0;border-left:none;border-top:1px solid var(--line)"><div class="n up" style="font-size:40px">38% → 46%</div><div class="k">이메일 광고비 → 매출</div></div>
+        </div>
+      </div>
+      <div class="panel reveal"><div class="lbl">02 · 이미 한 번 샜다</div>
+        <p class="sm" style="margin-bottom:18px">메타 W5 과집행. 광고비 3.6배 증액 대비 효율 반감.</p>
+        <div class="tape" style="flex-direction:column;gap:16px">
+          <div class="cell" style="padding:0"><div class="n dn" style="font-size:40px">ROI 306→123</div><div class="k">광고비 +255.9%, 매출 +43.6%</div></div>
+          <div class="cell" style="padding:16px 0 0;border-left:none;border-top:1px solid var(--line)"><div class="n amber" style="font-size:40px">35.2%</div><div class="k">초과분 319만 = 그 주 예산의</div></div>
+        </div>
+      </div>
+      <div class="panel reveal"><div class="lbl">03 · 데이터 정제가 선행</div>
+        <p class="sm" style="margin-bottom:18px">원본 그대로 사용 시 상기 순위 왜곡.</p>
+        <div class="tape" style="flex-direction:column;gap:16px">
+          <div class="cell" style="padding:0"><div class="n" style="font-size:40px">280→279→278</div><div class="k">중복 제거 → 이상치 제외</div></div>
+          <div class="cell" style="padding:16px 0 0;border-left:none;border-top:1px solid var(--line)"><div class="n amber" style="font-size:40px">9.6배</div><div class="k">이메일 이상치 AOV (평균 대비)</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">DA 공통 · 예산 의사결정 메모</div><div class="pageno">04/ 07</div>
+</section>
+
+<section class="slide">
+  <div class="head"><div class="eyebrow">IMPACT</div><h2 class="title">임팩트 · 지금 vs 권고</h2></div>
+  <div class="body">
+    <div class="two" style="grid-template-columns:1.35fr 1fr">
+      <div class="panel reveal">
+        <div class="lbl">채널별 예산 배분 vs 효율</div>
+        <table>
+          <thead><tr><th>채널</th><th class="num">광고비</th><th class="num">매출</th><th class="num">ROI</th><th>권고</th></tr></thead>
+          <tbody>
+            <tr><td>이메일</td><td class="num">38.5%</td><td class="num">46.3%</td><td class="num" style="color:var(--up)">1042%</td><td><span class="tag up">유지+</span></td></tr>
+            <tr><td>네이버</td><td class="num">22.5%</td><td class="num">17.1%</td><td class="num">659%</td><td><span class="tag up">유지</span></td></tr>
+            <tr class="flag"><td>메타</td><td class="num">26.0%</td><td class="num">7.8%</td><td class="num" style="color:var(--dn)">259%</td><td><span class="tag dn">한도·이동</span></td></tr>
+            <tr><td>카카오</td><td class="num">13.0%</td><td class="num">5.1%</td><td class="num">343%</td><td><span class="tag d">원인확인</span></td></tr>
+            <tr><td>오가닉</td><td class="num">0%</td><td class="num">23.7%</td><td class="num" style="color:var(--dim)">측정불가</td><td><span class="tag d">자산화</span></td></tr>
+          </tbody>
+        </table>
+        <p class="sm" style="margin-top:14px;color:var(--faint)">참고: ROI 259% = 광고비 1원당 매출 2.6원. 메타 단일 채널이 유료 예산의 1/4 사용, 매출은 1/13 기여. 본 메모의 핵심 근거.</p>
+      </div>
+      <div class="col">
+        <div class="panel amber reveal"><div class="lbl">319만 이동 시 기대 추가매출</div>
+          <table style="font-size:21px">
+            <tbody>
+              <tr><td>보수 (50%)</td><td class="num">12,513,258</td></tr>
+              <tr><td style="color:#fff;font-weight:700">기준 (75%)</td><td class="num" style="color:var(--amber);font-weight:800">18,758,415</td></tr>
+              <tr><td>상한 (100%)</td><td class="num">25,026,516</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="panel reveal"><div class="lbl">정성 효과</div>
+          <p class="sm">· 리포트 작성 반나절 → 1분<br>· 수기 계산 오류 제거<br>· 이상치 매 리포트 자동 플래그</p>
+        </div>
+        <div class="panel reveal"><div class="lbl">근거 · 가정</div><p class="sm" style="color:var(--faint)">ROAS 격차 7.83 × 실현율. 어트리뷰션 중복 미반영 추정치. 결정은 기준값 사용.</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">DA 공통 · 예산 의사결정 메모</div><div class="pageno">05/ 07</div>
+</section>
+
+<section class="slide">
+  <div class="head"><div class="eyebrow">EXECUTION</div><h2 class="title">실행 · 누가, 언제까지</h2></div>
+  <div class="body">
+    <div class="panel reveal" style="height:100%">
+      <table style="font-size:23px">
+        <thead><tr><th>액션</th><th>담당</th><th>기한</th><th>성공 기준</th></tr></thead>
+        <tbody>
+          <tr><td>메타 일 예산 한도 + 증액 승인 기준</td><td>퍼포먼스 리드</td><td>이번 주</td><td>승인 없는 초과 집행 0건</td></tr>
+          <tr class="flag"><td>초과분 319만원 이메일 이동</td><td>CRM 매니저</td><td>차주 캠페인 전</td><td>기준값(1,876만) 대비 실측 추적</td></tr>
+          <tr><td>카카오 W4 급락 원인 규명</td><td>카카오 담당</td><td>3영업일</td><td>예산소진·소재승인·장애 중 1건 확정</td></tr>
+          <tr><td>오가닉 자산화 로드맵</td><td>콘텐츠·SEO 리드</td><td>이번 달</td><td>우선 과제 3건 착수</td></tr>
+          <tr><td>데이터 검증 자동화</td><td>DA</td><td>차기 배포 전</td><td>중복·결측·AOV 자동 플래그 1스텝</td></tr>
+        </tbody>
+      </table>
+      <p class="sm" style="margin-top:20px;color:var(--faint)">우선순위 기준: 매출 임팩트 × 재발 위험 × 실행 난이도. 메타 건은 셋 다 높아 최우선.</p>
+    </div>
+  </div>
+  <div class="foot">DA 공통 · 예산 의사결정 메모</div><div class="pageno">06/ 07</div>
+</section>
+
+<section class="slide">
+  <div class="head"><div class="eyebrow">APPLICABILITY & REFLECTION</div><h2 class="title">적용 · 아쉬움 · 비전</h2></div>
+  <div class="body">
+    <div class="three">
+      <div class="panel reveal"><div class="lbl">우리 환경 적용 시</div><p class="sm">· 같은 컬럼 구조의 성과 CSV만 있으면 바로 재현<br>· 계획 예산 컬럼이 붙으면 집행률까지 자동<br>· 벤치마크 파일만 갱신하면 판정 최신화</p></div>
+      <div class="panel amber reveal"><div class="lbl">솔직한 아쉬움</div><p class="sm">· 단일 채널 ROI로 어트리뷰션 중복 미분리<br>· 이상치는 원본 로그 확인 전까지 잠정<br>· 목표 대비 실적 비교는 계획 데이터 부재로 미실시</p></div>
+      <div class="panel reveal"><div class="lbl">2주 더 준다면</div><p class="sm">→ 크로스채널 기여도(MTA) 분석 추가<br>→ 슬랙·이메일 자동 배포<br>→ 목표 예산 대비 실집행 트래킹</p></div>
+    </div>
+  </div>
+  <div class="foot">DA 공통 · 예산 의사결정 메모</div><div class="pageno">07/ 07</div>
+</section>
+
+<section class="slide">
+  <div class="gridbg"></div><div class="glow" style="bottom:-350px;left:-200px"></div>
+  <div class="close">
+    <div class="eyebrow reveal" style="text-align:center">CLOSING</div>
+    <h1 class="reveal">숫자를 <span class="hl">결정으로</span> 바꾸는 일,<br>계속 맡고 싶습니다</h1>
+    <p class="reveal">이 문제의 핵심은 계산이 아니라 "그래서 뭘 하나"였습니다. 채널 ROI 4배 격차를 예산 이동 근거로, 새는 319만원을 기대 매출 1,876만원으로 바꾸는 그 마지막 한 걸음을 설계했습니다.</p>
+    <p class="reveal" style="color:var(--faint)">모든 수치는 Python 계산 후 CSV로 재검증했습니다. 지어낸 숫자는 없습니다.</p>
+  </div>
+  <div class="cover-foot" style="bottom:80px"><span>2026.05.26 · 팀스파르타 AX 해커톤</span><span>DA 공통 · 예산 의사결정 메모</span></div>
+</section>
+
+</div>
+</div>
+
+<div class="deck-controls">
+  <button id="prev">◀</button>
+  <span id="counter">1 / 8</span>
+  <button id="next">▶</button>
+</div>
+
+<script>
+/* fixed-stage scale */
+function fit(){var k=Math.min(innerWidth/1920,innerHeight/1080);var s=document.getElementById('stage');
+  s.style.transform='translate('+(innerWidth-1920*k)/2+'px,'+(innerHeight-1080*k)/2+'px) scale('+k+')';}
+addEventListener('resize',fit);fit();
+/* nav */
+var slides=[].slice.call(document.querySelectorAll('.slide')),i=0;
+function show(n){i=Math.max(0,Math.min(slides.length-1,n));slides.forEach(function(s,x){s.classList.toggle('active',x===i)});
+  document.getElementById('counter').textContent=(i+1)+' / '+slides.length;}
+document.getElementById('next').onclick=function(){show(i+1)};
+document.getElementById('prev').onclick=function(){show(i-1)};
+addEventListener('keydown',function(e){if(e.key==='ArrowRight'||e.key===' '){show(i+1)}if(e.key==='ArrowLeft'){show(i-1)}});
+</script>
+</body>
+</html>
