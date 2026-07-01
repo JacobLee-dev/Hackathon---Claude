@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>채널 성과 진단 & 예산 재배분 리포트 — DA 공통</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F7F5EF; --card:#FFFFFF; --line:#DED8CB; --line2:#E7E1D4;
+  --navy:#0E2A3B; --ink:#14202B; --muted:#6B7280; --gold:#B08933;
+  --pos:#1B7A5A; --neg:#B23A48; --bar:#12384E; --band:#BFD3D0; --zebra:#FBFAF6;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'IBM Plex Sans',-apple-system,'Noto Sans KR',sans-serif;background:var(--paper);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:40px 28px 72px}
+h1,h2,h3{font-family:'Fraunces',Georgia,serif;color:var(--navy);letter-spacing:-.01em}
+
+.rep-head{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;flex-wrap:wrap}
+.rep-kick{font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:.35rem}
+.rep-title{font-family:'Fraunces',serif;font-size:2.15rem;font-weight:600;color:var(--navy);line-height:1.12}
+.rep-rule{height:2px;background:var(--navy);width:64px;margin:.9rem 0 .6rem}
+.rep-meta{font-size:.82rem;color:var(--muted)} .rep-meta b{color:var(--ink);font-weight:600}
+.rep-date{text-align:right;padding-top:.4rem}
+.rep-date .d{font-family:'Fraunces',serif;font-size:1.3rem;color:var(--navy);font-weight:600}
+
+.sec-kick{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:600;margin:2rem 0 .3rem}
+.sec-h{font-family:'Fraunces',serif;font-size:1.28rem;font-weight:600;color:var(--navy);margin:0 0 1rem;border-bottom:1px solid var(--line);padding-bottom:.5rem}
+
+.grid{display:grid;gap:14px}
+.g5{grid-template-columns:repeat(5,1fr)} .g4{grid-template-columns:repeat(4,1fr)} .g2{grid-template-columns:1fr 1fr}
+.kpi{background:var(--card);border:1px solid var(--line2);border-left:3px solid var(--navy);padding:.85rem 1rem}
+.kpi.pos{border-left-color:var(--pos)} .kpi.gold{border-left-color:var(--gold)}
+.k-lab{font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:.4rem}
+.k-val{font-family:'Fraunces',serif;font-size:1.55rem;font-weight:600;color:var(--navy);line-height:1.05}
+.k-sub{font-size:.78rem;color:var(--muted);margin-top:.35rem}
+.d-pos{color:var(--pos);font-weight:600} .d-neg{color:var(--neg);font-weight:600} .d-neu{color:var(--muted);font-weight:600}
+
+.tabs{display:flex;gap:.15rem;border-bottom:1px solid var(--line);margin:2.2rem 0 1.4rem;flex-wrap:wrap}
+.tab{font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:.9rem;color:var(--muted);padding:.6rem 1rem;background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;transition:color .12s}
+.tab:hover{color:var(--navy)}
+.tab.active{color:var(--navy);border-bottom-color:var(--navy)}
+.panel{display:none;animation:fade .25s ease} .panel.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+.card{background:var(--card);border:1px solid var(--line2);padding:1.4rem 1.5rem;margin-bottom:1rem}
+.chart-box{width:100%;overflow-x:auto}
+svg .axis{stroke:var(--line);stroke-width:1} svg .grid{stroke:#ECE7DB;stroke-width:1}
+svg text{font-family:'IBM Plex Sans',sans-serif;fill:var(--ink)}
+svg .ax-lab{fill:var(--muted);font-size:11px}
+.bar-hi rect{fill:var(--pos)}
+
+.pills{display:flex;gap:.45rem;flex-wrap:wrap;margin-bottom:1rem}
+.pill{font-family:'IBM Plex Sans',sans-serif;background:var(--card);border:1px solid var(--line);padding:.4rem 1rem;border-radius:3px;font-weight:600;font-size:.88rem;color:var(--ink);cursor:pointer;transition:all .12s}
+.pill:hover{border-color:var(--navy)}
+.pill.active{background:var(--navy);border-color:var(--navy);color:#fff}
+
+.roi-bar{margin-bottom:.7rem}
+.roi-bar .m{display:flex;justify-content:space-between;font-size:.86rem;font-weight:600;margin-bottom:.3rem}
+.roi-track{background:#EEEAE0;height:24px;position:relative}
+.roi-fill{height:100%;display:flex;align-items:center;padding-left:.6rem;color:#fff;font-size:.76rem;font-weight:600;font-variant-numeric:tabular-nums}
+.roi-na{height:24px;background:repeating-linear-gradient(45deg,#EEEAE0,#EEEAE0 7px,#E3DFD3 7px,#E3DFD3 14px);display:flex;align-items:center;padding-left:.6rem;font-size:.76rem;font-weight:600;color:var(--muted)}
+.avg-note{font-size:.76rem;color:var(--gold);font-weight:600;margin:.3rem 0 1rem}
+
+table.mbb{width:100%;border-collapse:collapse;font-size:.86rem;background:var(--card);border:1px solid var(--line2)}
+table.mbb thead th{background:var(--navy);color:#fff;font-weight:600;text-align:right;padding:.55rem .7rem;font-size:.78rem;white-space:nowrap}
+table.mbb thead th:first-child{text-align:left}
+table.mbb tbody td{padding:.5rem .7rem;text-align:right;color:var(--ink);border-bottom:1px solid #EFEBE0;font-variant-numeric:tabular-nums}
+table.mbb tbody td:first-child{text-align:left;font-weight:600;color:var(--navy)}
+table.mbb tbody tr:nth-child(even){background:var(--zebra)}
+table.mbb tbody tr:last-child td{border-bottom:none}
+table.mbb tbody tr.sum td{font-weight:700;background:#F2EEE4}
+.chip{display:inline-block;font-size:.72rem;font-weight:600;padding:.12rem .5rem;border-radius:10px}
+.chip-hi{background:#E3F0EA;color:var(--pos)} .chip-mid{background:#EFEBDD;color:#8A6D1F}
+.chip-lo{background:#F5E3E5;color:var(--neg)} .chip-na{background:#EEEAE0;color:var(--muted)}
+
+.callout{background:var(--card);border:1px solid var(--line2);border-top:3px solid var(--navy);padding:1rem 1.15rem;margin-bottom:.85rem}
+.callout.warn{border-top-color:var(--neg)} .callout.info{border-top-color:var(--gold)}
+.co-tag{display:inline-block;font-size:.64rem;letter-spacing:.08em;font-weight:600;text-transform:uppercase;padding:.15rem .5rem;color:#fff;margin-bottom:.5rem}
+.tag-red{background:var(--neg)} .tag-amber{background:var(--gold)} .tag-navy{background:var(--navy)}
+.co-h{font-family:'Fraunces',serif;font-size:1.02rem;font-weight:600;color:var(--navy);margin:0 0 .35rem}
+.co-b{font-size:.9rem;line-height:1.6;color:#2B3742} .co-b b{color:var(--navy)}
+
+.rec{background:var(--card);border:1px solid var(--line2);padding:1.15rem 1.3rem}
+.badge{display:inline-block;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:.72rem;padding:.2rem .55rem;border-radius:3px;color:#fff;margin-bottom:.6rem}
+.b-p0{background:var(--neg)} .b-p1{background:var(--gold)}
+.rec-h{font-family:'Fraunces',serif;font-size:1.05rem;color:var(--navy);margin:.1rem 0 .5rem}
+.rec-b{font-size:.9rem;line-height:1.65;color:#2B3742} .rec-b b{color:var(--navy)}
+.rec-fig{font-family:'Fraunces',serif;font-size:1.5rem;color:var(--pos);font-weight:600;display:block;margin:.3rem 0}
+.scn-row{display:flex;justify-content:space-between;font-size:.84rem;padding:.3rem 0;border-bottom:1px dashed var(--line)}
+.scn-row:last-child{border-bottom:none} .scn-row b{font-family:'IBM Plex Mono',monospace}
+
+.note{font-size:.76rem;color:var(--muted);border-top:1px solid var(--line);padding-top:.7rem;margin-top:1.2rem;line-height:1.55} .note b{color:var(--ink)}
+.tt{position:fixed;pointer-events:none;background:var(--navy);color:#fff;font-size:.75rem;padding:.35rem .6rem;border-radius:3px;opacity:0;transition:opacity .1s;font-variant-numeric:tabular-nums;z-index:20}
+
+@media(max-width:760px){
+  .g5,.g4,.g2{grid-template-columns:repeat(2,1fr)}
+  .rep-title{font-size:1.6rem} .rep-date{text-align:left}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="rep-head">
+  <div>
+    <div class="rep-kick">Marketing Performance Insights</div>
+    <div class="rep-title">채널 성과 진단 &amp; 예산 재배분 리포트</div>
+    <div class="rep-rule"></div>
+    <div class="rep-meta">DA 공통 · Problem 09 &nbsp;|&nbsp; 분석 기간 <b>W1–W8</b> (2026-04-01 ~ 05-26) &nbsp;|&nbsp; 5개 채널 · 유료 4 + 오가닉</div>
+  </div>
+  <div class="rep-date">
+    <div class="rep-meta">작성일</div>
+    <div class="d">2026.07.01</div>
+    <div class="rep-meta">계산 엔진 <b>pandas</b></div>
+  </div>
+</div>
+
+<div class="sec-kick">01 · Headline metrics</div>
+<div class="sec-h">핵심 성과 요약</div>
+<div class="grid g5">
+  <div class="kpi"><div class="k-lab">총 지출 (유료)</div><div class="k-val">5,068만원</div><div class="k-sub">50,683,819원</div></div>
+  <div class="kpi pos"><div class="k-lab">총 매출</div><div class="k-val">4.40억원</div><div class="k-sub">439,553,059원</div></div>
+  <div class="kpi pos"><div class="k-lab">전체 ROI</div><div class="k-val">867%</div><div class="k-sub">ROAS 8.67배</div></div>
+  <div class="kpi"><div class="k-lab">총 전환수</div><div class="k-val">22,694건</div><div class="k-sub">정제 후 278행 집계</div></div>
+  <div class="kpi gold"><div class="k-lab">오가닉 매출</div><div class="k-val">1.04억원</div><div class="k-sub">전체의 23.7% · 광고비 0원</div></div>
+</div>
+
+<div class="sec-kick">02 · Week over week</div>
+<div class="sec-h">전주 대비 변화 (W7 → W8)</div>
+<div class="grid g4">
+  <div class="kpi"><div class="k-lab">지출</div><div class="k-val">647만원</div><div class="k-sub"><span class="d-neu">▲ 7.2%</span></div></div>
+  <div class="kpi pos"><div class="k-lab">매출</div><div class="k-val">5,865만원</div><div class="k-sub"><span class="d-pos">▲ 3.8%</span></div></div>
+  <div class="kpi"><div class="k-lab">전환수</div><div class="k-val">3,081건</div><div class="k-sub"><span class="d-pos">▲ 7.8%</span></div></div>
+  <div class="kpi"><div class="k-lab">CTR</div><div class="k-val">4.57%</div><div class="k-sub"><span class="d-neu">▼ 0.8%</span></div></div>
+</div>
+
+<div class="tabs" id="tabs">
+  <button class="tab active" data-p="p-roi">채널 ROI · 벤치마크</button>
+  <button class="tab" data-p="p-fc">주간 추세 · 예측</button>
+  <button class="tab" data-p="p-issue">이슈 3가지</button>
+  <button class="tab" data-p="p-budget">예산 재배분</button>
+</div>
+
+<section class="panel active" id="p-roi">
+  <div class="sec-kick">03 · Channel efficiency</div>
+  <div class="sec-h">채널별 ROI 순위</div>
+  <div class="card">
+    <div class="roi-bar"><div class="m"><span>① 이메일</span><span>1,042.2%</span></div><div class="roi-track"><div class="roi-fill" style="width:100%;background:var(--pos)">ROAS 10.42</div></div></div>
+    <div class="roi-bar"><div class="m"><span>② 네이버광고</span><span>658.6%</span></div><div class="roi-track"><div class="roi-fill" style="width:63%;background:var(--bar)">ROAS 6.59</div></div></div>
+    <div class="roi-bar"><div class="m"><span>③ 카카오광고</span><span>343.3%</span></div><div class="roi-track"><div class="roi-fill" style="width:33%;background:var(--bar)">ROAS 3.43</div></div></div>
+    <div class="roi-bar"><div class="m"><span>④ 메타광고</span><span>258.7%</span></div><div class="roi-track"><div class="roi-fill" style="width:25%;background:var(--bar)">ROAS 2.59</div></div></div>
+    <div class="avg-note">┈ 전체 평균 867% (오가닉 무비용 매출 포함) · 유료 4채널 평균 대비 이메일·네이버가 견인</div>
+    <div class="roi-bar"><div class="m"><span>– 오가닉</span><span>측정 불가</span></div><div class="roi-na">광고비 0원 · 매출 1억 424만(2위) · 전환 5,331건 · CVR 3.11%</div></div>
+  </div>
+  <table class="mbb">
+    <thead><tr><th>채널</th><th>ROI</th><th>ROAS</th><th>업계평균 ROAS</th><th style="text-align:center">벤치마크 판정</th><th>CTR</th><th>CVR</th></tr></thead>
+    <tbody>
+      <tr><td>이메일</td><td>1,042.2%</td><td>10.42</td><td>18.5</td><td style="text-align:center"><span class="chip chip-lo">평균 하회</span></td><td>20.13%</td><td>5.91%</td></tr>
+      <tr><td>네이버광고</td><td>658.6%</td><td>6.59</td><td>3.2</td><td style="text-align:center"><span class="chip chip-hi">상위 25% ↑</span></td><td>6.21%</td><td>2.61%</td></tr>
+      <tr><td>카카오광고</td><td>343.3%</td><td>3.43</td><td>2.8</td><td style="text-align:center"><span class="chip chip-hi">평균 상회</span></td><td>2.12%</td><td>1.97%</td></tr>
+      <tr><td>메타광고</td><td>258.7%</td><td>2.59</td><td>2.4</td><td style="text-align:center"><span class="chip chip-mid">평균 소폭 상회</span></td><td>1.74%</td><td>1.90%</td></tr>
+      <tr><td>오가닉</td><td>측정 불가</td><td>측정 불가</td><td>—</td><td style="text-align:center"><span class="chip chip-na">—</span></td><td>8.63%</td><td>3.11%</td></tr>
+    </tbody>
+  </table>
+  <div class="note"><b>주.</b> 이메일 CTR은 발송 대비 클릭(오픈율 성격)이라 광고 CTR 벤치마크와 직접 비교에 주의. 오가닉은 광고비 0원이라 ROI/ROAS 측정 불가.<br><b>Source.</b> metrics.json (pandas) · context/industry-news.md (2026 한국 이커머스)</div>
+</section>
+
+<section class="panel" id="p-fc">
+  <div class="sec-kick">04 · Trend &amp; forecast</div>
+  <div class="sec-h">주간 추세와 4주 예측</div>
+  <div class="pills" id="fc-pills">
+    <button class="pill active" data-m="revenue">매출(원)</button>
+    <button class="pill" data-m="spend">지출(원)</button>
+    <button class="pill" data-m="conversions">전환수(건)</button>
+  </div>
+  <div class="card">
+    <div class="chart-box"><svg id="fc-svg" viewBox="0 0 760 340" preserveAspectRatio="xMidYMid meet" style="width:100%;height:auto"></svg></div>
+  </div>
+  <div class="note" id="fc-note"></div>
+</section>
+
+<section class="panel" id="p-issue">
+  <div class="sec-kick">05 · Issues</div>
+  <div class="sec-h">진단된 이슈 3가지</div>
+  <div class="callout warn"><span class="co-tag tag-red">Issue 01 · 효율 저하</span>
+    <div class="co-h">메타광고 W5 광고비 급증 대비 ROI 급락</div>
+    <div class="co-b">메타 광고비 W4 <b>1,248,328원</b> → W5 <b>4,442,609원</b> (+255.9%)인데 매출은 +43.6%에 그침. ROI 306.2% → <b>123.5%</b>. 권장: 일 예산 한도 + 증액 승인 기준 설정, W5 소재·타겟 점검.</div></div>
+  <div class="callout"><span class="co-tag tag-navy">Issue 02 · 집행 변동</span>
+    <div class="co-h">카카오광고 W4 집행 급락</div>
+    <div class="co-b">카카오 지출 W3 <b>888,279원</b> → W4 <b>522,005원</b> (-41.2%), 매출 -38.3%. 성과 악화가 아니라 집행 자체가 줄어든 패턴. 예산 소진·소재 승인·플랫폼 장애 여부 확인 필요.</div></div>
+  <div class="callout info"><span class="co-tag tag-amber">Issue 03 · 데이터 품질</span>
+    <div class="co-h">이상치·중복·결측이 집계 신뢰도를 흔듦</div>
+    <div class="co-b">이메일 2026-04-26 AOV <b>196,646원</b> = 정제 후 평균 20,543원의 <b>9.6배</b> → 제외 집계. 완전 중복 1행, 결측 3건 처리. raw 280행 → clean <b>278행</b>.</div></div>
+</section>
+
+<section class="panel" id="p-budget">
+  <div class="sec-kick">06 · Reallocation</div>
+  <div class="sec-h">예산 재배분 기획안</div>
+  <div class="grid g2">
+    <div class="rec">
+      <span class="badge b-p0">P0 · 즉시</span>
+      <div class="rec-h">메타 증액 한도 → 고효율 채널 이동</div>
+      <div class="rec-b">메타 ROI <b>258.7%</b> vs 이메일 ROI <b>1,042.2%</b> (약 4배 격차). W5 초과 집행분 <b>3,194,281원</b>을 이메일 CRM으로 이동 시 기대 추가 매출 (ROAS 격차 7.83 · 실현율 가정별):</div>
+      <div class="scn-row"><span>보수 (실현 50%)</span><b>+12,513,258원</b></div>
+      <div class="scn-row"><span>기준 (실현 75%) ← 의사결정 기준</span><b style="color:var(--pos)">+18,769,887원</b></div>
+      <div class="scn-row"><span>공격 (실현 100%, 상한)</span><b>+25,026,516원</b></div>
+    </div>
+    <div class="rec">
+      <span class="badge b-p1">P1 · 장기</span>
+      <div class="rec-h">오가닉 자산화</div>
+      <div class="rec-b">오가닉 매출 <b>104,238,814원</b> (전체의 23.7%)를 광고비 <b>0원</b>으로 확보 중. 아낀 예산 일부를 SEO·브랜드검색·재방문 유도에 투입해 유료 채널 의존도를 구조적으로 낮추는 장기 과제.</div>
+      <span class="rec-fig">CVR 3.11% · CTR 8.63%</span>
+      <div class="rec-b" style="font-size:.8rem;color:var(--muted)">단기 매출보다 채널 포트폴리오 안정성에 기여. 콘텐츠·SEO 자산 구축에 시간이 필요해 P1.</div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:1rem">
+    <div class="rec-h" style="margin-bottom:.7rem">실행 계획 — 액션 · 오너 · 기한 · KPI</div>
+    <table class="mbb">
+      <thead><tr><th>#</th><th style="text-align:left">액션</th><th style="text-align:left">담당</th><th style="text-align:left">기한</th><th style="text-align:left">성공 기준</th></tr></thead>
+      <tbody>
+        <tr><td>P0-1</td><td style="text-align:left">메타 일 예산 한도 + 승인 기준</td><td style="text-align:left">퍼포먼스 리드</td><td style="text-align:left">이번 주</td><td style="text-align:left">승인 없는 초과 집행 0건</td></tr>
+        <tr><td>P0-2</td><td style="text-align:left">초과분 이메일 CRM 이동</td><td style="text-align:left">CRM 매니저</td><td style="text-align:left">차주 캠페인 전</td><td style="text-align:left">추가 매출 1,877만원 실측</td></tr>
+        <tr><td>P1-1</td><td style="text-align:left">카카오 W4 -41.2% 원인 규명</td><td style="text-align:left">채널 담당</td><td style="text-align:left">3영업일</td><td style="text-align:left">원인 1건 확정</td></tr>
+        <tr><td>P1-2</td><td style="text-align:left">오가닉 자산화 로드맵</td><td style="text-align:left">콘텐츠·SEO 리드</td><td style="text-align:left">이번 달</td><td style="text-align:left">우선 과제 3건 착수</td></tr>
+        <tr><td>Q-1</td><td style="text-align:left">데이터 검증 자동화</td><td style="text-align:left">DA(본인)</td><td style="text-align:left">차기 배포 전</td><td style="text-align:left">자동 검증 스텝 1개 추가</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="note">모든 합계·ROI·변화율·기대효과는 pandas로 계산한 <b>metrics.json</b> 기반. Claude는 계산 완료 수치의 해석만 담당. 예측은 W1–W8 선형 추세 + 잔차 기반 95% 구간(8주 표본 단순 추세 추정치, ARIMA/ML은 과적합 위험으로 의도적 배제). 정본 제출물은 마크다운 리포트이며, 이 페이지는 인터랙티브 시각화 보조본.</div>
+
+</div>
+
+<div class="tt" id="tt"></div>
+
+<script>
+const DATA = {"hist":["W1","W2","W3","W4","W5","W6","W7","W8"],"fut":["W9","W10","W11","W12"],"metrics":{"revenue":{"label":"매출(원)","kind":"won","history":[52821550,51199860,52219733,48693748,57180059,62315444,56476861,58645804],"point":[60618859,61879909,63140960,64402010],"lower":[54262921,55523972,56785022,58046072],"upper":[66974796,68235847,69496897,70757947],"slope":1261050},"spend":{"label":"지출(원)","kind":"won","history":[5622421,5815808,5662118,5093919,9086110,6895725,6037286,6470432],"point":[7124932,7300366,7475800,7651234],"lower":[4845482,5020916,5196350,5371785],"upper":[9404381,9579816,9755250,9930684],"slope":175434},"conversions":{"label":"전환수(건)","kind":"cnt","history":[2717,2671,2656,2506,2967,3237,2859,3081],"point":[3142,3209,3277,3345],"lower":[2788,2855,2923,2991],"upper":[3496,3563,3631,3699],"slope":68}}};
+
+document.querySelectorAll('#tabs .tab').forEach(t=>{
+  t.addEventListener('click',()=>{
+    document.querySelectorAll('#tabs .tab').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById(t.dataset.p).classList.add('active');
+    if(t.dataset.p==='p-fc') drawChart(currentMetric);
+  });
+});
+
+const tt=document.getElementById('tt');
+function showTip(e,txt){tt.textContent=txt;tt.style.opacity=1;tt.style.left=(e.clientX+12)+'px';tt.style.top=(e.clientY-10)+'px';}
+function hideTip(){tt.style.opacity=0;}
+
+const NS='http://www.w3.org/2000/svg';
+function el(tag,attrs){const n=document.createElementNS(NS,tag);for(const k in attrs)n.setAttribute(k,attrs[k]);return n;}
+function fmtWon(v){if(Math.abs(v)>=1e8)return (v/1e8).toFixed(2)+'억';if(Math.abs(v)>=1e4)return Math.round(v/1e4).toLocaleString()+'만';return Math.round(v).toLocaleString();}
+function fmtVal(v,kind){return kind==='won'?fmtWon(v)+'원':Math.round(v).toLocaleString()+'건';}
+
+let currentMetric='revenue';
+function drawChart(key){
+  currentMetric=key;
+  const d=DATA.metrics[key];
+  const svg=document.getElementById('fc-svg');
+  svg.innerHTML='';
+  const W=760,H=340,padL=64,padR=24,padT=20,padB=40;
+  const plotW=W-padL-padR, plotH=H-padT-padB;
+  const weeks=DATA.hist.concat(DATA.fut);
+  const n=weeks.length;
+  const xFor=i=>padL+i*(plotW/(n-1));
+  const bandIdx=[7,8,9,10,11];
+  const bandLow=[d.history[7]].concat(d.lower);
+  const bandUp=[d.history[7]].concat(d.upper);
+  const fcPt=[d.history[7]].concat(d.point);
+  let vals=d.history.concat(d.lower,d.upper,d.point);
+  let vmin=Math.min(...vals), vmax=Math.max(...vals);
+  const pad=(vmax-vmin)*0.12; vmin=Math.max(0,vmin-pad); vmax=vmax+pad;
+  const yFor=v=>padT+plotH-(v-vmin)/(vmax-vmin)*plotH;
+
+  for(let t=0;t<=4;t++){
+    const v=vmin+(vmax-vmin)*t/4, y=yFor(v);
+    svg.appendChild(el('line',{class:'grid',x1:padL,y1:y,x2:W-padR,y2:y}));
+    const lab=el('text',{class:'ax-lab',x:padL-8,y:y+4,'text-anchor':'end'});
+    lab.textContent=d.kind==='won'?fmtWon(v):Math.round(v).toLocaleString();
+    svg.appendChild(lab);
+  }
+  weeks.forEach((w,i)=>{
+    const lab=el('text',{class:'ax-lab',x:xFor(i),y:H-padB+18,'text-anchor':'middle'});
+    lab.textContent=w; if(i>=8)lab.setAttribute('fill','#B08933'); svg.appendChild(lab);
+  });
+  svg.appendChild(el('line',{class:'axis',x1:padL,y1:padT,x2:padL,y2:padT+plotH}));
+
+  let bpts='';
+  bandIdx.forEach((idx,j)=>{bpts+=xFor(idx)+','+yFor(bandUp[j])+' ';});
+  for(let j=bandIdx.length-1;j>=0;j--){bpts+=xFor(bandIdx[j])+','+yFor(bandLow[j])+' ';}
+  svg.appendChild(el('polygon',{points:bpts,fill:'#BFD3D0',opacity:.35}));
+
+  let hp=d.history.map((v,i)=>xFor(i)+','+yFor(v)).join(' ');
+  svg.appendChild(el('polyline',{points:hp,fill:'none',stroke:'#0E2A3B','stroke-width':2.5}));
+  let fp=bandIdx.map((idx,j)=>xFor(idx)+','+yFor(fcPt[j])).join(' ');
+  svg.appendChild(el('polyline',{points:fp,fill:'none',stroke:'#B08933','stroke-width':2.5,'stroke-dasharray':'5 3'}));
+
+  d.history.forEach((v,i)=>{
+    const c=el('circle',{cx:xFor(i),cy:yFor(v),r:4.5,fill:'#0E2A3B',cursor:'pointer'});
+    c.addEventListener('mousemove',e=>showTip(e,weeks[i]+' · '+fmtVal(v,d.kind)));
+    c.addEventListener('mouseleave',hideTip); svg.appendChild(c);
+  });
+  d.point.forEach((v,j)=>{
+    const idx=8+j;
+    const c=el('circle',{cx:xFor(idx),cy:yFor(v),r:4.5,fill:'#B08933',cursor:'pointer'});
+    c.addEventListener('mousemove',e=>showTip(e,weeks[idx]+' 예측 · '+fmtVal(v,d.kind)+' (95%: '+fmtVal(d.lower[j],d.kind)+'~'+fmtVal(d.upper[j],d.kind)+')'));
+    c.addEventListener('mouseleave',hideTip); svg.appendChild(c);
+  });
+
+  const lg=el('text',{x:W-padR,y:padT+4,'text-anchor':'end','font-size':11,fill:'#6B7280'});
+  lg.textContent='● 실적(W1–W8)   ● 예측(W9–W12) + 95% 구간';
+  svg.appendChild(lg);
+
+  const trend=d.slope>0?'증가':(d.slope<0?'감소':'유지');
+  const fcTxt=DATA.fut.map((w,j)=>w+' '+fmtVal(d.point[j],d.kind)).join(', ');
+  document.getElementById('fc-note').innerHTML='<b>추세.</b> 주당 '+(d.slope>0?'+':'')+d.slope.toLocaleString()+' / 주 ('+trend+'). <b>예측.</b> '+fcTxt+'<br><b>방법.</b> W1–W8 선형 추세 + 잔차 기반 95% 구간. 8주 표본 단순 추세 추정치.';
+}
+
+document.querySelectorAll('#fc-pills .pill').forEach(p=>{
+  p.addEventListener('click',()=>{
+    document.querySelectorAll('#fc-pills .pill').forEach(x=>x.classList.remove('active'));
+    p.classList.add('active'); drawChart(p.dataset.m);
+  });
+});
+drawChart('revenue');
+</script>
+</body>
+</html>

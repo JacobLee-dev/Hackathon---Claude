@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>마케팅 성과 인사이트 리포트 — Challenge (주최 양식)</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif; background: #f4f5f7; color: #1a1a2e; line-height: 1.6; }
+.container { max-width: 1080px; margin: 0 auto; padding: 40px 24px; }
+
+.header { background: #fff; border-radius: 12px; padding: 32px 36px; margin-bottom: 24px; border-left: 5px solid #e63946; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+.level-badge { display: inline-block; background: #e63946; color: white; font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 20px; margin-bottom: 14px; letter-spacing: .5px; }
+.header h1 { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+.header-meta { font-size: 13px; color: #6c757d; display: flex; flex-wrap: wrap; gap: 16px; }
+.breadcrumb { font-size: 12px; color: #aaa; margin-bottom: 10px; }
+
+.stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+.stat { background: #fff; border-radius: 10px; padding: 20px; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,.06); border-top: 4px solid; }
+.stat-n { font-size: 30px; font-weight: 800; }
+.stat-label { font-size: 13px; color: #666; margin-top: 2px; }
+.stat-sub { font-size: 12px; color: #999; margin-top: 4px; }
+.c-red { border-color: #e63946; color: #e63946; }
+.c-blue { border-color: #4361ee; color: #4361ee; }
+.c-green { border-color: #2d6a4f; color: #2d6a4f; }
+.c-purple { border-color: #7048e8; color: #7048e8; }
+
+.section { background: #fff; border-radius: 12px; padding: 28px 32px; margin-bottom: 24px; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+.section-title { font-size: 15px; font-weight: 700; padding-bottom: 14px; margin-bottom: 20px; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 8px; }
+.note { font-size: 12px; color: #888; margin-bottom: 12px; }
+
+.bar-row { margin-bottom: 12px; }
+.bar-meta { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 5px; font-weight: 500; }
+.bar-track { background: #f0f2f5; border-radius: 6px; height: 30px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 6px; display: flex; align-items: center; padding-left: 12px; color: white; font-size: 12px; font-weight: 700; letter-spacing: .3px; }
+.bar-na { height: 30px; background: repeating-linear-gradient(45deg,#eef0f3,#eef0f3 8px,#e3e6ea 8px,#e3e6ea 16px); border-radius: 6px; display: flex; align-items: center; padding-left: 12px; color: #888; font-size: 12px; font-weight: 700; }
+
+.tbl-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+thead th { background: #f8f9fa; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: #6c757d; padding: 10px 12px; text-align: left; border-bottom: 2px solid #e9ecef; white-space: nowrap; }
+tbody td { padding: 9px 12px; border-bottom: 1px solid #f0f2f5; vertical-align: middle; }
+tbody tr:hover { background: #f8f9fb; }
+td.num { text-align: right; font-variant-numeric: tabular-nums; }
+.rank { font-weight: 800; color: #4361ee; }
+.tag { display:inline-block; font-size:11px; font-weight:700; padding:2px 8px; border-radius:5px; }
+.t-best { background:#d0ebe0; color:#1f5c3d; }
+.t-mid { background:#dde3ff; color:#3452cc; }
+.t-low { background:#fff3cd; color:#856404; }
+.t-na { background:#e9ecef; color:#495057; }
+.chg-up { color:#2d6a4f; font-weight:700; }
+.chg-down { color:#e63946; font-weight:700; }
+
+.insight-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.insight-card { border-radius: 10px; padding: 20px; border: 1px solid #eee; }
+.i-num { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+.i-title { font-size: 13px; font-weight: 700; line-height: 1.5; margin-bottom: 12px; }
+.i-section { margin-bottom: 10px; }
+.i-section-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: #888; margin-bottom: 3px; }
+.i-section-body { font-size: 12px; line-height: 1.6; color: #333; }
+
+.dec-table td { font-size: 12.5px; vertical-align: top; }
+.dec-table td:first-child { font-weight: 600; white-space: nowrap; color: #444; }
+
+/* 파이프라인 (Standard) */
+.pipeline { display: flex; align-items: stretch; gap: 6px; flex-wrap: wrap; margin-bottom: 18px; }
+.pipe-step { background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 12px 14px; text-align: center; flex: 1; min-width: 90px; }
+.pipe-step.input { background: #dde3ff; border-color: #b9c5ff; }
+.pipe-step.output { background: #d0ebe0; border-color: #a6d8bf; }
+.pipe-step .cmd { font-size: 13px; font-weight: 800; color: #1a1a2e; }
+.pipe-step .desc { font-size: 11px; color: #666; margin-top: 3px; }
+.pipe-arrow { align-self: center; color: #adb5bd; font-weight: 700; }
+.usage-box { background: #1a1a2e; color: #e9ecef; border-radius: 8px; padding: 16px 18px; font-family: 'SFMono-Regular', Consolas, monospace; font-size: 12.5px; line-height: 1.9; margin-bottom: 16px; }
+.usage-box .cmd { color: #7ee0b8; font-weight: 700; }
+.usage-box .comment { color: #8a94a6; }
+.design-note { background: #fff8f0; border-left: 3px solid #f4a261; border-radius: 0 8px 8px 0; padding: 14px 18px; font-size: 13px; line-height: 1.7; color: #444; }
+.design-note strong { display: block; margin-bottom: 4px; color: #1a1a2e; }
+
+/* Challenge — 우선순위 프레임워크 & 기획안 */
+.priority-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 16px; }
+.priority-item { background: #f8f9fa; border-radius: 8px; padding: 16px; border-top: 3px solid; }
+.priority-name { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+.priority-desc { font-size: 12px; color: #555; }
+.priority-weight { font-size: 20px; font-weight: 800; margin-bottom: 4px; }
+.pw-blue { border-color: #4361ee; color: #4361ee; }
+.pw-orange { border-color: #e76f51; color: #e76f51; }
+.pw-green { border-color: #2d6a4f; color: #2d6a4f; }
+
+.proposal { border-radius: 12px; border: 1px solid #e9ecef; margin-bottom: 20px; overflow: hidden; }
+.proposal-header { padding: 20px 24px; display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.proposal-meta { flex: 1; }
+.proposal-num { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #888; margin-bottom: 6px; }
+.proposal-title { font-size: 16px; font-weight: 800; margin-bottom: 6px; }
+.proposal-sub { font-size: 13px; color: #666; }
+.priority-badge { display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 10px; padding: 10px 18px; min-width: 80px; text-align: center; }
+.priority-badge .pb-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 2px; }
+.priority-badge .pb-score { font-size: 22px; font-weight: 900; }
+.pb-p0 { background: #ffe0e3; color: #c9323e; }
+.pb-p1 { background: #fff3cd; color: #856404; }
+.proposal-body { padding: 0 24px 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.prop-section { background: #f8f9fa; border-radius: 8px; padding: 16px; }
+.prop-section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: #888; margin-bottom: 8px; }
+.prop-section-body { font-size: 13px; color: #333; line-height: 1.6; }
+.evidence { margin-top: 8px; }
+.ev-item { background: white; border-left: 3px solid #4361ee; border-radius: 0 6px 6px 0; padding: 8px 12px; margin-bottom: 6px; font-size: 12px; }
+.ev-item .vid { font-weight: 700; color: #4361ee; margin-right: 6px; }
+.score-breakdown { display: flex; flex-direction: column; gap: 6px; }
+.score-row { display: flex; justify-content: space-between; align-items: center; font-size: 12px; }
+.score-bar-track { background: #e9ecef; border-radius: 3px; height: 8px; flex: 1; margin: 0 10px; }
+.score-bar-fill { height: 100%; border-radius: 3px; background: #4361ee; }
+.score-val { font-weight: 700; font-size: 13px; color: #333; min-width: 30px; text-align: right; }
+.badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 5px; }
+.b-p0 { background: #ffe0e3; color: #c9323e; }
+.b-p1 { background: #fff3cd; color: #856404; }
+.scn-cons { color:#2d6a4f; font-weight:700; }
+.scn-base { color:#4361ee; font-weight:800; }
+.scn-aggr { color:#e63946; font-weight:700; }
+
+@media(max-width:700px) {
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+  .insight-grid { grid-template-columns: 1fr; }
+  .priority-grid { grid-template-columns: 1fr; }
+  .proposal-body { grid-template-columns: 1fr; }
+  .pipeline { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <div class="breadcrumb">필수 · 권장 · 도전 요건 모두 충족한 통합 리포트</div>
+  <div class="level-badge">🟢 Basic · 🟡 Standard · 🔴 Challenge — 통합 (100 + 30 + 30 = 160점)</div>
+  <h1>마케팅 성과 인사이트 리포트 + 예산 재배분 기획안</h1>
+  <div class="header-meta">
+    <span>📅 2026-04-01 ~ 2026-05-26 (W1~W8)</span>
+    <span>📊 280행 → 정제 후 278행 집계</span>
+    <span>🐍 계산: Python pandas · 해석: Claude</span>
+    <span>✍️ [이름] · 2026-07-01</span>
+  </div>
+</div>
+
+<!-- 핵심 수치 -->
+<div class="stats-row">
+  <div class="stat c-blue"><div class="stat-n">5,068만</div><div class="stat-label">총 지출 (유료)</div><div class="stat-sub">50,683,819원</div></div>
+  <div class="stat c-green"><div class="stat-n">4억 3,955만</div><div class="stat-label">총 매출 (전 채널)</div><div class="stat-sub">439,553,059원</div></div>
+  <div class="stat c-red"><div class="stat-n">867.2%</div><div class="stat-label">전체 ROI (매출/광고비)</div><div class="stat-sub">ROAS 8.67배 · 순수익 ROI 767.2%</div></div>
+  <div class="stat c-purple"><div class="stat-n">22,694</div><div class="stat-label">총 전환수</div><div class="stat-sub">건</div></div>
+</div>
+
+<!-- 채널별 ROI 순위 -->
+<div class="section">
+  <div class="section-title">📊 채널별 ROI 순위 (ROI = 매출 / 광고비 × 100)</div>
+  <p class="note">⚠️ 오가닉은 광고비 0원 → ROI 측정 불가. 효율 순위에서 별도 표기. 이메일 매출 이상치 1건(2026-04-26)·완전 중복 1행 제거 후 집계.</p>
+  <div class="bar-row">
+    <div class="bar-meta"><span>① 이메일</span><span>1,042.2%</span></div>
+    <div class="bar-track"><div class="bar-fill" style="width:100%;background:#2d6a4f">1,042.2% · ROAS 10.42</div></div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-meta"><span>② 네이버광고</span><span>658.6%</span></div>
+    <div class="bar-track"><div class="bar-fill" style="width:63%;background:#4361ee">658.6% · ROAS 6.59</div></div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-meta"><span>③ 카카오광고</span><span>343.3%</span></div>
+    <div class="bar-track"><div class="bar-fill" style="width:33%;background:#7048e8">343.3% · ROAS 3.43</div></div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-meta"><span>④ 메타광고</span><span>258.7%</span></div>
+    <div class="bar-track"><div class="bar-fill" style="width:25%;background:#e76f51">258.7% · ROAS 2.59</div></div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-meta"><span>– 오가닉</span><span>측정 불가</span></div>
+    <div class="bar-na">광고비 0원 · 매출 1억 424만(2위) · 전환 5,331건 · CVR 3.11% (무비용 고전환 채널)</div>
+  </div>
+</div>
+
+<!-- 채널별 상세표 -->
+<div class="section">
+  <div class="section-title">📋 채널별 상세 (Python 계산값)</div>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>순위</th><th>채널</th><th>총 광고비(원)</th><th>총 매출(원)</th><th>ROI</th><th>ROAS</th><th>CTR</th><th>CVR</th><th>평가</th></tr></thead>
+    <tbody>
+      <tr><td class="rank">1</td><td>이메일</td><td class="num">19,533,919</td><td class="num">203,582,846</td><td class="num">1,042.2%</td><td class="num">10.42</td><td class="num">20.13%</td><td class="num">5.91%</td><td><span class="tag t-best">최고 효율</span></td></tr>
+      <tr><td class="rank">2</td><td>네이버광고</td><td class="num">11,398,051</td><td class="num">75,065,735</td><td class="num">658.6%</td><td class="num">6.59</td><td class="num">6.21%</td><td class="num">2.61%</td><td><span class="tag t-best">우수</span></td></tr>
+      <tr><td class="rank">3</td><td>카카오광고</td><td class="num">6,576,315</td><td class="num">22,577,538</td><td class="num">343.3%</td><td class="num">3.43</td><td class="num">2.12%</td><td class="num">1.97%</td><td><span class="tag t-mid">양호</span></td></tr>
+      <tr><td class="rank">4</td><td>메타광고</td><td class="num">13,175,534</td><td class="num">34,088,126</td><td class="num">258.7%</td><td class="num">2.59</td><td class="num">1.74%</td><td class="num">1.90%</td><td><span class="tag t-low">개선 필요</span></td></tr>
+      <tr><td class="rank">–</td><td>오가닉</td><td class="num">0</td><td class="num">104,238,814</td><td class="num">측정 불가</td><td class="num">–</td><td class="num">8.63%</td><td class="num">3.11%</td><td><span class="tag t-na">무비용</span></td></tr>
+      <tr style="font-weight:700;background:#fafbfc"><td>합계</td><td>전체</td><td class="num">50,683,819</td><td class="num">439,553,059</td><td class="num">867.2%</td><td class="num">8.67</td><td class="num">–</td><td class="num">–</td><td></td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<!-- 업계 벤치마크 대비 평가 -->
+<div class="section">
+  <div class="section-title">🎯 업계 벤치마크 대비 평가 (2026 한국 이커머스 · context/industry-news.md)</div>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>채널</th><th>우리 ROAS</th><th>업계 평균</th><th>상위 25%</th><th>ROAS 판정</th><th>우리 CTR</th><th>우리 CVR</th><th>CVR 판정</th></tr></thead>
+    <tbody>
+      <tr><td>네이버광고</td><td class="num">6.59</td><td class="num">3.2</td><td class="num">6.5</td><td><span class="tag t-best">상위권</span></td><td class="num">6.21%</td><td class="num">2.61%</td><td><span class="tag t-low">평균 하회</span></td></tr>
+      <tr><td>메타광고</td><td class="num">2.59</td><td class="num">2.4</td><td class="num">4.8</td><td><span class="tag t-mid">평균 소폭 상회</span></td><td class="num">1.74%</td><td class="num">1.90%</td><td><span class="tag t-low">평균 하회</span></td></tr>
+      <tr><td>카카오광고</td><td class="num">3.43</td><td class="num">2.8</td><td class="num">5.1</td><td><span class="tag t-mid">평균 상회</span></td><td class="num">2.12%</td><td class="num">1.97%</td><td><span class="tag t-best">상회</span></td></tr>
+      <tr><td>오가닉</td><td class="num">측정 불가</td><td class="num">–</td><td class="num">–</td><td><span class="tag t-na">–</span></td><td class="num">8.63%</td><td class="num">3.11%</td><td><span class="tag t-mid">평균 수준</span></td></tr>
+      <tr><td>이메일</td><td class="num">10.42</td><td class="num">18.5</td><td class="num">42.0</td><td><span class="tag t-low">업계 평균 하회</span></td><td class="num">20.13%</td><td class="num">5.91%</td><td><span class="tag t-best">상회</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="note" style="margin-top:12px">핵심 해석: ① 네이버 ROAS가 업계 상위 25%(6.5) 진입 — 유지·소폭 증액 근거. ② 이메일은 내부 1위지만 업계 평균(18.5)엔 못 미쳐 발송 최적화·개인화가 증액보다 우선. ③ 네이버·메타·카카오 CVR이 평균 하회 — 클릭은 좋으나 랜딩 이탈, Ad-Landing Fit 점검이 예산보다 먼저.</p>
+</div>
+
+<!-- 이슈 3가지 -->
+<div class="section">
+  <div class="section-title">💡 이슈 3가지</div>
+  <div class="insight-grid">
+    <div class="insight-card" style="border-left:4px solid #e63946">
+      <div class="i-num" style="color:#e63946">이슈 01 · 광고비 급증</div>
+      <div class="i-title">메타광고 W5 광고비 급등 → ROI 급락</div>
+      <div class="i-section"><div class="i-section-label">근거 수치</div><div class="i-section-body">메타 광고비 W4 124.8만 → <strong>W5 444.3만(약 3.6배)</strong>, ROI 306.2%→123.5%. 매출 증가는 미미(382만→549만, +43.6%).</div></div>
+      <div class="i-section"><div class="i-section-label">권장 조치</div><div class="i-section-body">예산 과집행 의심. 일 한도 설정, W5 소재·타겟·빈도 분리 점검. 증액 승인 기준 사전 정의.</div></div>
+    </div>
+    <div class="insight-card" style="border-left:4px solid #f4a261">
+      <div class="i-num" style="color:#e76f51">이슈 02 · 광고비 급락</div>
+      <div class="i-title">카카오광고 W4 집행 41% 급락</div>
+      <div class="i-section"><div class="i-section-label">근거 수치</div><div class="i-section-body">카카오 광고비 W3 88.8만 → <strong>W4 52.2만(-41.2%)</strong>, 매출도 -38.3%. 성과 악화가 아니라 집행 자체 축소로 보임.</div></div>
+      <div class="i-section"><div class="i-section-label">권장 조치</div><div class="i-section-body">예산 소진·소재 승인·플랫폼 장애 여부 확인. 집행 예정액 대비 실집행액을 리포트에 상시 포함.</div></div>
+    </div>
+    <div class="insight-card" style="border-left:4px solid #4361ee">
+      <div class="i-num" style="color:#4361ee">이슈 03 · 데이터 품질</div>
+      <div class="i-title">이상치·중복·결측이 집계 신뢰성 위협</div>
+      <div class="i-section"><div class="i-section-label">근거 수치</div><div class="i-section-body">이메일 2026-04-26 AOV 196,646원 = 정제 후 평균(20,543원)의 <strong>9.6배</strong>. 완전 중복 1행, 결측 3건(impressions·clicks·revenue 각 1).</div></div>
+      <div class="i-section"><div class="i-section-label">권장 조치</div><div class="i-section-body">이상치·중복 제거 후 재집계(본 리포트 반영). 결측 3건 NaN 유지. 배포 전 자동 검증 스텝 고정.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- 전주 대비 변화율 -->
+<div class="section">
+  <div class="section-title">📈 전주 대비 변화율 (W7 → W8)</div>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>지표</th><th>W7</th><th>W8</th><th>변화율</th><th>상태</th></tr></thead>
+    <tbody>
+      <tr><td>지출</td><td class="num">6,037,286원</td><td class="num">6,470,432원</td><td class="num chg-down">+7.2%</td><td>↑ 증가</td></tr>
+      <tr><td>매출</td><td class="num">56,476,861원</td><td class="num">58,645,804원</td><td class="num chg-up">+3.8%</td><td>↑ 증가</td></tr>
+      <tr><td>전환수</td><td class="num">2,859건</td><td class="num">3,081건</td><td class="num chg-up">+7.8%</td><td>↑ 증가</td></tr>
+      <tr><td>CTR</td><td class="num">4.61%</td><td class="num">4.57%</td><td class="num">-0.8%</td><td>→ 유지</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="note" style="margin-top:12px">지출 증가율(+7.2%)이 매출 증가율(+3.8%)보다 커 한계 효율은 소폭 둔화. 전환수는 함께 늘어(+7.8%) 볼륨은 건강. CTR 소폭 하락은 클릭 품질 저하 신호일 수 있음. ±50% 기준 초과 항목 없음.</p>
+</div>
+
+<!-- 파이프라인 (Standard) -->
+<div class="section">
+  <div class="section-title">⚙️ 재현 파이프라인 — 새 CSV 넣으면 동일 리포트 자동 생성 (Standard)</div>
+  <div class="pipeline">
+    <div class="pipe-step input"><div class="cmd">새 CSV</div><div class="desc">data/ 폴더에 교체</div></div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step"><div class="cmd">정제</div><div class="desc">중복·결측·이상치</div></div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step"><div class="cmd">계산</div><div class="desc">pandas 합계·ROI</div></div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step"><div class="cmd">렌더</div><div class="desc">리포트 + metrics</div></div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step output"><div class="cmd">제출</div><div class="desc">노션 공개 링크</div></div>
+  </div>
+  <div class="usage-box">
+    <span class="comment"># 1. 새 marketing_performance.csv를 data/ 폴더에 교체</span><br>
+    <span class="cmd">python generate_insight_report.py</span><span class="comment">              # 기본 CSV</span><br>
+    <span class="cmd">python generate_insight_report.py --csv 경로.csv</span><span class="comment"> # 새 CSV 지정</span><br>
+    <span class="comment"># → output/insight_report.md + output/metrics.json 재생성</span>
+  </div>
+  <div class="design-note">
+    <strong>주간 리포트 구성 근거 (본인 설계)</strong>
+    경영진은 "이번 주 한 줄 결론 + 어디에 돈을 더/덜 쓸지"를, 마케팅팀은 "당장 손볼 이상 항목 + 반복 패턴"을 원한다. 관심사가 다르므로 핵심 요약 → ROI 순위 → 이슈 3개 → W7/W8 변화율 순서로 배열했다. 계산은 모두 Python으로 고정해 매주 동일 품질을 보장하고, Claude는 그 수치의 해석만 갱신한다.
+  </div>
+</div>
+
+<!-- Challenge — 우선순위 프레임워크 -->
+<div class="section">
+  <div class="section-title">⚖️ 예산 재배분 우선순위 판단 기준 (본인 설계) — Challenge</div>
+  <div class="priority-grid">
+    <div class="priority-item pw-blue">
+      <div class="priority-weight pw-blue">40%</div>
+      <div class="priority-name">ROI 격차 × 재발 가능성</div>
+      <div class="priority-desc">받는 채널과 주는 채널의 ROI 차이가 크고, 문제 패턴이 이미 발생했는가.</div>
+    </div>
+    <div class="priority-item pw-orange">
+      <div class="priority-weight pw-orange">35%</div>
+      <div class="priority-name">증분 여력</div>
+      <div class="priority-desc">받는 채널이 예산을 더 받아도 효율을 유지할 수 있는가(모수·확장성).</div>
+    </div>
+    <div class="priority-item pw-green">
+      <div class="priority-weight pw-green">25%</div>
+      <div class="priority-name">실행 난이도</div>
+      <div class="priority-desc">즉시 집행 조정으로 가능한가, 새 자산(콘텐츠·리스트) 구축이 필요한가.</div>
+    </div>
+  </div>
+  <p style="font-size:13px;color:#666">근거 데이터: 이메일 ROI 1,042% · 네이버 659% vs 메타 259%(W5 과집행). 효율 4배 격차 + 메타의 명백한 과집행 시그널을 예산 이동의 1차 근거로 삼는다.</p>
+</div>
+
+<!-- 기획안 1 -->
+<div class="proposal">
+  <div class="proposal-header" style="background:#fff8f8;border-bottom:1px solid #eee">
+    <div class="proposal-meta">
+      <div class="proposal-num">기획안 01</div>
+      <div class="proposal-title">메타광고 증액 한도 설정 → 이메일·네이버 재배분</div>
+      <div class="proposal-sub">최저 ROI 채널(메타)의 과집행 예산을 최고 ROI 채널로 이동해 동일 예산 대비 매출 증대</div>
+    </div>
+    <div class="priority-badge pb-p0">
+      <div class="pb-label">Priority</div>
+      <div class="pb-score">P0</div>
+    </div>
+  </div>
+  <div class="proposal-body">
+    <div>
+      <div class="prop-section">
+        <div class="prop-section-title">문제 정의</div>
+        <div class="prop-section-body">메타 ROI 258.7%로 유료 4채널 중 최저. W5에 광고비가 평소 ~125만에서 444만(약 3.6배)으로 과집행됐는데 매출 증분은 미미(382만→549만)해 ROI가 306.2%→123.5%로 붕괴. 같은 예산을 이메일(1,042%)·네이버(659%)에 썼다면 기여가 훨씬 컸다.</div>
+      </div>
+      <div class="prop-section" style="margin-top:12px">
+        <div class="prop-section-title">재배분 제안</div>
+        <div class="prop-section-body">
+          • 메타 일 예산 한도 + 증액 승인 기준 설정<br>
+          • W5식 초과 집행분(3,194,281원) → 이메일 CRM 리스트 확대·발송 최적화<br>
+          • 잔여분 → 네이버 고전환 키워드 확장<br>
+          • 메타는 리타겟팅 중심 효율 구간만 유지
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="prop-section">
+        <div class="prop-section-title">근거 데이터</div>
+        <div class="evidence">
+          <div class="ev-item"><span class="vid">메타</span>ROI 258.7% · ROAS 2.59 (유료 최저), W5 광고비 444만·ROI 123.5%</div>
+          <div class="ev-item"><span class="vid">이메일</span>ROI 1,042.2% · ROAS 10.42 (최고 효율)</div>
+          <div class="ev-item"><span class="vid">네이버</span>ROI 658.6% · ROAS 6.59 (안정적 고효율)</div>
+        </div>
+      </div>
+      <div class="prop-section" style="margin-top:12px">
+        <div class="prop-section-title">기대효과 시나리오 (Python 계산 · 초과분 319만 이동, ROAS 격차 7.83 기준)</div>
+        <div class="prop-section-body" style="line-height:1.9">
+          <span class="scn-cons">보수(실현 50%)</span> 추가 매출 12,513,258원<br>
+          <span class="scn-base">기준(실현 75%)</span> 추가 매출 18,769,887원 ← 의사결정 기준값<br>
+          <span class="scn-aggr">공격(실현 100%)</span> 추가 매출 25,026,516원 (이론적 상한)
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 기획안 2 -->
+<div class="proposal">
+  <div class="proposal-header" style="background:#fffdf0;border-bottom:1px solid #eee">
+    <div class="proposal-meta">
+      <div class="proposal-num">기획안 02</div>
+      <div class="proposal-title">오가닉 성과를 유료 예산 의존도 절감 과제로 분리</div>
+      <div class="proposal-sub">광고비 0으로 매출·전환 2위인 오가닉을 콘텐츠·SEO로 키워 광고 의존도 하락</div>
+    </div>
+    <div class="priority-badge pb-p1">
+      <div class="pb-label">Priority</div>
+      <div class="pb-score">P1</div>
+    </div>
+  </div>
+  <div class="proposal-body">
+    <div>
+      <div class="prop-section">
+        <div class="prop-section-title">문제 정의</div>
+        <div class="prop-section-body">오가닉은 광고비 0원인데도 매출 1억 424만(전체 2위)·전환 5,331건(2위)·CVR 3.11%로 유료 채널 못지않은 성과. 전체 매출의 23.7%를 무비용으로 냈으나 통제·확장 수단이 없어 방치 상태. 콘텐츠·SEO 투자 시 한계 광고비 없이 매출이 늘어 전체 ROI 구조가 개선된다.</div>
+      </div>
+      <div class="prop-section" style="margin-top:12px">
+        <div class="prop-section-title">재배분 제안</div>
+        <div class="prop-section-body">
+          • 기획안1 회수분 일부 → SEO 콘텐츠·브랜드검색 랜딩 개선<br>
+          • 이메일-오가닉 재방문 유도 연계<br>
+          • 분기별 오가닉 유입·전환 추적 지표 신설<br>
+          • 효과 검증 후 유료 의존 비중 단계적 축소
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="prop-section">
+        <div class="prop-section-title">근거 데이터</div>
+        <div class="evidence">
+          <div class="ev-item"><span class="vid">오가닉</span>광고비 0 · 매출 1억 424만(2위) · 전환 5,331건(2위)</div>
+          <div class="ev-item"><span class="vid">오가닉</span>CTR 8.63%(전 채널 최고) · CVR 3.11%</div>
+          <div class="ev-item"><span class="vid">전체</span>유료 광고비 5,068만 의존 → 무비용 매출 비중 확대 여지</div>
+        </div>
+      </div>
+      <div class="prop-section" style="margin-top:12px">
+        <div class="prop-section-title">우선순위 판단</div>
+        <div class="prop-section-body">단기 매출 즉시성은 이메일·네이버보다 낮지만 유료 광고 의존도를 낮추는 <strong>구조 개선</strong>이라 장기 가치가 크다. 콘텐츠·SEO 자산 구축에 시간이 필요해 실행 난이도가 높으므로 <strong>P1</strong>으로 배치.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 실행 로드맵 / 액션 KPI -->
+<div class="section">
+  <div class="section-title">🗺️ 실행 계획 — 액션 · 오너 · 기한 · 성공 기준(KPI)</div>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>#</th><th>액션</th><th>담당</th><th>기한</th><th>성공 기준 (KPI)</th></tr></thead>
+    <tbody>
+      <tr><td><span class="badge b-p0">P0-1</span></td><td><strong>메타 일 예산 한도 + 증액 승인 기준 설정</strong></td><td>퍼포먼스 마케팅 리드</td><td>이번 주 내</td><td>일 한도 세팅 완료, 승인 없는 초과 집행 0건</td></tr>
+      <tr><td><span class="badge b-p0">P0-2</span></td><td><strong>W5식 초과분을 이메일 CRM으로 이동</strong></td><td>CRM 매니저</td><td>차주 캠페인 전</td><td>이동 예산 집행 + 추가 매출 기준값(1,877만원) 실측 추적</td></tr>
+      <tr><td><span class="badge b-p1">P1-1</span></td><td>카카오 W4 집행 -41.2% 원인 규명</td><td>채널 담당(카카오)</td><td>3영업일 내</td><td>예산 소진/소재 승인/플랫폼 장애 중 원인 1건 확정</td></tr>
+      <tr><td><span class="badge b-p1">P1-2</span></td><td>오가닉 자산화 로드맵 수립</td><td>콘텐츠·SEO 리드</td><td>이번 달 내</td><td>SEO·브랜드검색 우선 과제 3건 정의 및 착수</td></tr>
+      <tr><td><span class="badge" style="background:#dde3ff;color:#3452cc">Q-1</span></td><td>데이터 검증 자동화(중복·결측·AOV 플래그)</td><td>DA(본인)</td><td>차기 리포트 배포 전</td><td>배포 전 자동 검증 스텝 1개 추가, 수동 확인 제거</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<!-- 의사결정 로그 -->
+<div class="section">
+  <div class="section-title">📝 의사결정 로그</div>
+  <div class="tbl-wrap">
+  <table class="dec-table">
+    <thead><tr><th>결정 항목</th><th>선택</th><th>근거</th></tr></thead>
+    <tbody>
+      <tr><td>완전 중복 행</td><td>제거(280→279)</td><td>동일 행 2건 → drop_duplicates. 미제거 시 네이버 W7 성과·전환 부풀려짐</td></tr>
+      <tr><td>이메일 매출 이상치</td><td>2026-04-26 제외(279→278)</td><td>AOV 196,646원(평균 20,543원의 9.6배) = 입력 오류 의심. 원본 로그 확인 전 제외 집계</td></tr>
+      <tr><td>오가닉 ROI</td><td>측정 불가 표기</td><td>광고비 0 → 0으로 나누기. 효율 순위 제외, 전환·CVR로만 평가</td></tr>
+      <tr><td>결측 3건</td><td>NaN 유지(0 미대체)</td><td>impressions·clicks·revenue 각 1건. 0 대체 시 CTR·매출 왜곡 → groupby 합산에서 자동 제외</td></tr>
+      <tr><td>계산 방법</td><td>Python pandas</td><td>합계·ROI·변화율·기대효과 모두 코드 계산. 수기 추정 없음 → 재현·검증 가능</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<p style="text-align:center;font-size:12px;color:#aaa;margin-top:8px">리포트 생성: Python pandas / Claude Code · 데이터: data/marketing_performance.csv (280행, 8주 × 5채널 × 7일)</p>
+
+</div>
+</body>
+</html>

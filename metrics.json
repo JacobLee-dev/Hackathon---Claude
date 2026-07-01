@@ -1,0 +1,667 @@
+{
+  "raw_rows": 280,
+  "deduped_rows": 279,
+  "clean_rows": 278,
+  "date_min": "2026-04-01",
+  "date_max": "2026-05-26",
+  "weeks": [
+    "W1",
+    "W2",
+    "W3",
+    "W4",
+    "W5",
+    "W6",
+    "W7",
+    "W8"
+  ],
+  "missing_rows": [
+    {
+      "date": "2026-04-11",
+      "channel": "카카오광고",
+      "week": "W2",
+      "impressions": NaN,
+      "clicks": 1073.0,
+      "spend": 135370,
+      "conversions": 20,
+      "revenue": 362217.0
+    },
+    {
+      "date": "2026-04-20",
+      "channel": "메타광고",
+      "week": "W3",
+      "impressions": 105866.0,
+      "clicks": NaN,
+      "spend": 182832,
+      "conversions": 36,
+      "revenue": 591615.0
+    },
+    {
+      "date": "2026-05-07",
+      "channel": "네이버광고",
+      "week": "W6",
+      "impressions": 43847.0,
+      "clicks": 2958.0,
+      "spend": 207924,
+      "conversions": 73,
+      "revenue": NaN
+    }
+  ],
+  "missing_counts": {
+    "impressions": 1,
+    "clicks": 1,
+    "spend": 0,
+    "conversions": 0,
+    "revenue": 1
+  },
+  "duplicate_rows": [
+    {
+      "date": "2026-05-15",
+      "channel": "네이버광고",
+      "impressions": 54932.0,
+      "clicks": 3488.0,
+      "spend": 226958,
+      "conversions": 94,
+      "revenue": 1863508.0,
+      "week": "W7"
+    },
+    {
+      "date": "2026-05-15",
+      "channel": "네이버광고",
+      "impressions": 54932.0,
+      "clicks": 3488.0,
+      "spend": 226958,
+      "conversions": 94,
+      "revenue": 1863508.0,
+      "week": "W7"
+    }
+  ],
+  "outlier_rows": [
+    {
+      "date": "2026-04-26",
+      "channel": "이메일",
+      "week": "W4",
+      "conversions": 164,
+      "revenue": 32249907.0,
+      "aov": 196645.7743902439
+    }
+  ],
+  "channel": {
+    "이메일": {
+      "spend": 19533919,
+      "revenue": 203582846.0,
+      "conversions": 9910,
+      "impressions": 833373.0,
+      "clicks": 167726.0,
+      "ROI_pct": 1042.201751732461,
+      "ROAS": 10.422017517324608,
+      "CTR_pct": 20.126161994689053,
+      "CVR_pct": 5.908445917746801,
+      "AOV": 20543.173158425834
+    },
+    "네이버광고": {
+      "spend": 11398051,
+      "revenue": 75065735.0,
+      "conversions": 4106,
+      "impressions": 2530463.0,
+      "clicks": 157168.0,
+      "ROI_pct": 658.5839543971158,
+      "ROAS": 6.585839543971158,
+      "CTR_pct": 6.211037268673756,
+      "CVR_pct": 2.6124910923343174,
+      "AOV": 18281.96176327326
+    },
+    "카카오광고": {
+      "spend": 6576315,
+      "revenue": 22577538.0,
+      "conversions": 1310,
+      "impressions": 3132667.0,
+      "clicks": 66567.0,
+      "ROI_pct": 343.3159451759838,
+      "ROAS": 3.4331594517598383,
+      "CTR_pct": 2.1249306102436036,
+      "CVR_pct": 1.9679420733997324,
+      "AOV": 17234.761832061067
+    },
+    "메타광고": {
+      "spend": 13175534,
+      "revenue": 34088126.0,
+      "conversions": 2037,
+      "impressions": 6154600.0,
+      "clicks": 107205.0,
+      "ROI_pct": 258.7229177959694,
+      "ROAS": 2.587229177959694,
+      "CTR_pct": 1.7418678711857798,
+      "CVR_pct": 1.900097943192948,
+      "AOV": 16734.475208640157
+    },
+    "오가닉": {
+      "spend": 0,
+      "revenue": 104238814.0,
+      "conversions": 5331,
+      "impressions": 1988985.0,
+      "clicks": 171626.0,
+      "ROI_pct": NaN,
+      "ROAS": NaN,
+      "CTR_pct": 8.62882324401642,
+      "CVR_pct": 3.106172724412385,
+      "AOV": 19553.33220784093
+    }
+  },
+  "weekly": {
+    "W1": {
+      "spend": 5622421,
+      "revenue": 52821550.0,
+      "conversions": 2717,
+      "impressions": 1737884.0,
+      "clicks": 80343.0,
+      "CTR_pct": 4.6230358297792025
+    },
+    "W2": {
+      "spend": 5815808,
+      "revenue": 51199860.0,
+      "conversions": 2671,
+      "impressions": 1714503.0,
+      "clicks": 79593.0,
+      "CTR_pct": 4.642336583837999
+    },
+    "W3": {
+      "spend": 5662118,
+      "revenue": 52219733.0,
+      "conversions": 2656,
+      "impressions": 1777003.0,
+      "clicks": 78995.0,
+      "CTR_pct": 4.445406113551862
+    },
+    "W4": {
+      "spend": 5093919,
+      "revenue": 48693748.0,
+      "conversions": 2506,
+      "impressions": 1617528.0,
+      "clicks": 74653.0,
+      "CTR_pct": 4.615252409850092
+    },
+    "W5": {
+      "spend": 9086110,
+      "revenue": 57180059.0,
+      "conversions": 2967,
+      "impressions": 2087817.0,
+      "clicks": 89491.0,
+      "CTR_pct": 4.28634310382567
+    },
+    "W6": {
+      "spend": 6895725,
+      "revenue": 62315444.0,
+      "conversions": 3237,
+      "impressions": 1864691.0,
+      "clicks": 90806.0,
+      "CTR_pct": 4.86976126339431
+    },
+    "W7": {
+      "spend": 6037286,
+      "revenue": 56476861.0,
+      "conversions": 2859,
+      "impressions": 1850960.0,
+      "clicks": 85390.0,
+      "CTR_pct": 4.613281756493928
+    },
+    "W8": {
+      "spend": 6470432,
+      "revenue": 58645804.0,
+      "conversions": 3081,
+      "impressions": 1989702.0,
+      "clicks": 91021.0,
+      "CTR_pct": 4.574604639287692
+    }
+  },
+  "channel_week": {
+    "네이버광고|W1": {
+      "spend": 1319132,
+      "revenue": 9344994.0,
+      "conversions": 516,
+      "impressions": 311167.0,
+      "clicks": 19293.0,
+      "ROI_pct": 708.4199306816907,
+      "CTR_pct": 6.200207605562286,
+      "CVR_pct": 2.6745451718239774
+    },
+    "네이버광고|W2": {
+      "spend": 1423205,
+      "revenue": 8473222.0,
+      "conversions": 468,
+      "impressions": 303580.0,
+      "clicks": 18620.0,
+      "ROI_pct": 595.3620174184324,
+      "CTR_pct": 6.133473878384611,
+      "CVR_pct": 2.513426423200859
+    },
+    "네이버광고|W3": {
+      "spend": 1376128,
+      "revenue": 9319814.0,
+      "conversions": 501,
+      "impressions": 327547.0,
+      "clicks": 19842.0,
+      "ROI_pct": 677.2490640405545,
+      "CTR_pct": 6.0577565967632125,
+      "CVR_pct": 2.524947081947384
+    },
+    "네이버광고|W4": {
+      "spend": 1379613,
+      "revenue": 9679505.0,
+      "conversions": 520,
+      "impressions": 298802.0,
+      "clicks": 19136.0,
+      "ROI_pct": 701.6101616902711,
+      "CTR_pct": 6.404240935468973,
+      "CVR_pct": 2.717391304347826
+    },
+    "네이버광고|W5": {
+      "spend": 1465726,
+      "revenue": 9751603.0,
+      "conversions": 529,
+      "impressions": 321884.0,
+      "clicks": 20059.0,
+      "ROI_pct": 665.30872755208,
+      "CTR_pct": 6.231748083160394,
+      "CVR_pct": 2.637220200408794
+    },
+    "네이버광고|W6": {
+      "spend": 1477123,
+      "revenue": 8088565.0,
+      "conversions": 505,
+      "impressions": 321282.0,
+      "clicks": 19797.0,
+      "ROI_pct": 547.589131033773,
+      "CTR_pct": 6.161876482342614,
+      "CVR_pct": 2.55089154922463
+    },
+    "네이버광고|W7": {
+      "spend": 1366511,
+      "revenue": 9474180.0,
+      "conversions": 490,
+      "impressions": 288279.0,
+      "clicks": 18408.0,
+      "ROI_pct": 693.3116528150889,
+      "CTR_pct": 6.385480732207341,
+      "CVR_pct": 2.661886136462408
+    },
+    "네이버광고|W8": {
+      "spend": 1590613,
+      "revenue": 10933852.0,
+      "conversions": 577,
+      "impressions": 357922.0,
+      "clicks": 22013.0,
+      "ROI_pct": 687.3986318482246,
+      "CTR_pct": 6.150222674213935,
+      "CVR_pct": 2.621178394585018
+    },
+    "메타광고|W1": {
+      "spend": 1155815,
+      "revenue": 4021189.0,
+      "conversions": 243,
+      "impressions": 680569.0,
+      "clicks": 12753.0,
+      "ROI_pct": 347.90939726513324,
+      "CTR_pct": 1.873873185525641,
+      "CVR_pct": 1.9054340155257588
+    },
+    "메타광고|W2": {
+      "spend": 1179767,
+      "revenue": 3518558.0,
+      "conversions": 216,
+      "impressions": 698369.0,
+      "clicks": 11858.0,
+      "ROI_pct": 298.241771468434,
+      "CTR_pct": 1.6979562380346207,
+      "CVR_pct": 1.821555068308315
+    },
+    "메타광고|W3": {
+      "spend": 1157106,
+      "revenue": 4009286.0,
+      "conversions": 232,
+      "impressions": 683681.0,
+      "clicks": 10397.0,
+      "ROI_pct": 346.4925426019742,
+      "CTR_pct": 1.5207384730598041,
+      "CVR_pct": 2.2314129075694913
+    },
+    "메타광고|W4": {
+      "spend": 1248328,
+      "revenue": 3822559.0,
+      "conversions": 231,
+      "impressions": 736358.0,
+      "clicks": 12633.0,
+      "ROI_pct": 306.21431226408447,
+      "CTR_pct": 1.715605724389495,
+      "CVR_pct": 1.8285442887675136
+    },
+    "메타광고|W5": {
+      "spend": 4442609,
+      "revenue": 5488374.0,
+      "conversions": 333,
+      "impressions": 1019030.0,
+      "clicks": 17826.0,
+      "ROI_pct": 123.53943369763127,
+      "CTR_pct": 1.7493106189219159,
+      "CVR_pct": 1.8680578929653315
+    },
+    "메타광고|W6": {
+      "spend": 1255256,
+      "revenue": 4336716.0,
+      "conversions": 256,
+      "impressions": 757952.0,
+      "clicks": 13328.0,
+      "ROI_pct": 345.4845864110588,
+      "CTR_pct": 1.758422696951786,
+      "CVR_pct": 1.9207683073229291
+    },
+    "메타광고|W7": {
+      "spend": 1303475,
+      "revenue": 4174562.0,
+      "conversions": 244,
+      "impressions": 758950.0,
+      "clicks": 13425.0,
+      "ROI_pct": 320.2640633690711,
+      "CTR_pct": 1.76889123130641,
+      "CVR_pct": 1.8175046554934824
+    },
+    "메타광고|W8": {
+      "spend": 1433178,
+      "revenue": 4716882.0,
+      "conversions": 282,
+      "impressions": 819691.0,
+      "clicks": 14985.0,
+      "ROI_pct": 329.12045817058316,
+      "CTR_pct": 1.828127916495362,
+      "CVR_pct": 1.8818818818818819
+    },
+    "오가닉|W1": {
+      "spend": 0,
+      "revenue": 12644368.0,
+      "conversions": 652,
+      "impressions": 234719.0,
+      "clicks": 20956.0,
+      "ROI_pct": NaN,
+      "CTR_pct": 8.92812256357602,
+      "CVR_pct": 3.1112807787745753
+    },
+    "오가닉|W2": {
+      "spend": 0,
+      "revenue": 12833716.0,
+      "conversions": 669,
+      "impressions": 246955.0,
+      "clicks": 21155.0,
+      "ROI_pct": NaN,
+      "CTR_pct": 8.566337996801037,
+      "CVR_pct": 3.162372961474828
+    },
+    "오가닉|W3": {
+      "spend": 0,
+      "revenue": 11994056.0,
+      "conversions": 616,
+      "impressions": 233434.0,
+      "clicks": 20412.0,
+      "ROI_pct": NaN,
+      "CTR_pct": 8.744227490425558,
+      "CVR_pct": 3.017832647462277
+    },
+    "오가닉|W4": {
+      "spend": 0,
+      "revenue": 13150134.0,
+      "conversions": 664,
+      "impressions": 238670.0,
+      "clicks": 20747.0,
+      "ROI_pct": NaN,
+      "CTR_pct": 8.692755687769724,
+      "CVR_pct": 3.2004627175013254
+    },
+    "오가닉|W5": {
+      "spend": 0,
+      "revenue": 12940973.0,
+      "conversions": 662,
+      "impressions": 246785.0,
+      "clicks": 21574.0,
+      "ROI_pct": NaN,
+      "CTR_pct": 8.742022408169053,
+      "CVR_pct": 3.0685083897283767
+    },
+    "오가닉|W6": {
+      "spend": 0,
+      "revenue": 12491434.0,
+      "conversions": 636,
+      "impressions": 249986.0,
+      "clicks": 20969.0,
+      "ROI_pct": NaN,
+      "CTR_pct": 8.388069731904986,
+      "CVR_pct": 3.033048786303591
+    },
+    "오가닉|W7": {
+      "spend": 0,
+      "revenue": 14175309.0,
+      "conversions": 709,
+      "impressions": 268759.0,
+      "clicks": 22953.0,
+      "ROI_pct": NaN,
+      "CTR_pct": 8.540365159864415,
+      "CVR_pct": 3.0889208382346536
+    },
+    "오가닉|W8": {
+      "spend": 0,
+      "revenue": 14008824.0,
+      "conversions": 723,
+      "impressions": 269677.0,
+      "clicks": 22860.0,
+      "ROI_pct": NaN,
+      "CTR_pct": 8.47680744001157,
+      "CVR_pct": 3.162729658792651
+    },
+    "이메일|W1": {
+      "spend": 2319714,
+      "revenue": 24017916.0,
+      "conversions": 1144,
+      "impressions": 95023.0,
+      "clicks": 18911.0,
+      "ROI_pct": 1035.382637687232,
+      "CTR_pct": 19.90149753217642,
+      "CVR_pct": 6.049389244355137
+    },
+    "이메일|W2": {
+      "spend": 2335774,
+      "revenue": 23279144.0,
+      "conversions": 1138,
+      "impressions": 98143.0,
+      "clicks": 19041.0,
+      "ROI_pct": 996.6351196648307,
+      "CTR_pct": 19.401281803083258,
+      "CVR_pct": 5.9765768604590095
+    },
+    "이메일|W3": {
+      "spend": 2240605,
+      "revenue": 23884590.0,
+      "conversions": 1129,
+      "impressions": 95653.0,
+      "clicks": 19233.0,
+      "ROI_pct": 1065.9884272328234,
+      "CTR_pct": 20.107053620900547,
+      "CVR_pct": 5.870119066188322
+    },
+    "이메일|W4": {
+      "spend": 1943973,
+      "revenue": 20182223.0,
+      "conversions": 982,
+      "impressions": 83006.0,
+      "clicks": 16647.0,
+      "ROI_pct": 1038.1946148429015,
+      "CTR_pct": 20.055176734211987,
+      "CVR_pct": 5.898960773712981
+    },
+    "이메일|W5": {
+      "spend": 2384574,
+      "revenue": 26381472.0,
+      "conversions": 1287,
+      "impressions": 106910.0,
+      "clicks": 21944.0,
+      "ROI_pct": 1106.3389938831842,
+      "CTR_pct": 20.525675802076513,
+      "CVR_pct": 5.8649289099526065
+    },
+    "이메일|W6": {
+      "spend": 3283546,
+      "revenue": 34622421.0,
+      "conversions": 1682,
+      "impressions": 137841.0,
+      "clicks": 28571.0,
+      "ROI_pct": 1054.421683143772,
+      "CTR_pct": 20.727504878809643,
+      "CVR_pct": 5.8870883063245945
+    },
+    "이메일|W7": {
+      "spend": 2491469,
+      "revenue": 25387694.0,
+      "conversions": 1231,
+      "impressions": 107150.0,
+      "clicks": 21171.0,
+      "ROI_pct": 1018.9849442236689,
+      "CTR_pct": 19.758282781147923,
+      "CVR_pct": 5.81455764961504
+    },
+    "이메일|W8": {
+      "spend": 2534264,
+      "revenue": 25827386.0,
+      "conversions": 1317,
+      "impressions": 109647.0,
+      "clicks": 22208.0,
+      "ROI_pct": 1019.1276836193861,
+      "CTR_pct": 20.254088119145987,
+      "CVR_pct": 5.930295389048991
+    },
+    "카카오광고|W1": {
+      "spend": 827760,
+      "revenue": 2793083.0,
+      "conversions": 162,
+      "impressions": 416406.0,
+      "clicks": 8430.0,
+      "ROI_pct": 337.4266695660578,
+      "CTR_pct": 2.024466506246308,
+      "CVR_pct": 1.9217081850533808
+    },
+    "카카오광고|W2": {
+      "spend": 877062,
+      "revenue": 3095220.0,
+      "conversions": 180,
+      "impressions": 367456.0,
+      "clicks": 8919.0,
+      "ROI_pct": 352.9077761891406,
+      "CTR_pct": 2.4272293825655313,
+      "CVR_pct": 2.0181634712411705
+    },
+    "카카오광고|W3": {
+      "spend": 888279,
+      "revenue": 3011987.0,
+      "conversions": 178,
+      "impressions": 436688.0,
+      "clicks": 9111.0,
+      "ROI_pct": 339.08118958120144,
+      "CTR_pct": 2.0863866192796685,
+      "CVR_pct": 1.953682361980024
+    },
+    "카카오광고|W4": {
+      "spend": 522005,
+      "revenue": 1859327.0,
+      "conversions": 109,
+      "impressions": 260692.0,
+      "clicks": 5490.0,
+      "ROI_pct": 356.18950010057375,
+      "CTR_pct": 2.1059334386939375,
+      "CVR_pct": 1.9854280510018214
+    },
+    "카카오광고|W5": {
+      "spend": 793201,
+      "revenue": 2617637.0,
+      "conversions": 156,
+      "impressions": 393208.0,
+      "clicks": 8088.0,
+      "ROI_pct": 330.00929146584537,
+      "CTR_pct": 2.0569266139040914,
+      "CVR_pct": 1.9287833827893175
+    },
+    "카카오광고|W6": {
+      "spend": 879800,
+      "revenue": 2776308.0,
+      "conversions": 158,
+      "impressions": 397630.0,
+      "clicks": 8141.0,
+      "ROI_pct": 315.561263923619,
+      "CTR_pct": 2.047380730830169,
+      "CVR_pct": 1.9407935143102812
+    },
+    "카카오광고|W7": {
+      "spend": 875831,
+      "revenue": 3265116.0,
+      "conversions": 185,
+      "impressions": 427822.0,
+      "clicks": 9433.0,
+      "ROI_pct": 372.8020588446858,
+      "CTR_pct": 2.2048889491424006,
+      "CVR_pct": 1.9612000424043252
+    },
+    "카카오광고|W8": {
+      "spend": 912377,
+      "revenue": 3158860.0,
+      "conversions": 182,
+      "impressions": 432765.0,
+      "clicks": 8955.0,
+      "ROI_pct": 346.2231073339201,
+      "CTR_pct": 2.0692523656025785,
+      "CVR_pct": 2.0323841429369067
+    }
+  },
+  "overall": {
+    "spend": 50683819,
+    "revenue": 439553059.0,
+    "roi_sales_pct": 867.2453411610519,
+    "roi_profit_pct": 767.2453411610518,
+    "conversions": 22694
+  },
+  "wow": {
+    "spend": {
+      "W7": 6037286,
+      "W8": 6470432,
+      "change_pct": 7.174515171220976
+    },
+    "revenue": {
+      "W7": 56476861.0,
+      "W8": 58645804.0,
+      "change_pct": 3.8404099689605626
+    },
+    "conversions": {
+      "W7": 2859,
+      "W8": 3081,
+      "change_pct": 7.76495278069255
+    },
+    "CTR_pct": {
+      "W7": 4.613281756493928,
+      "W8": 4.574604639287692,
+      "change_pct": -0.8383861911705586
+    }
+  },
+  "issue_metrics": {
+    "meta_w4_spend": 1248328.0,
+    "meta_w5_spend": 4442609.0,
+    "meta_w4_revenue": 3822559.0,
+    "meta_w5_revenue": 5488374.0,
+    "meta_w4_roi": 306.21431226408447,
+    "meta_w5_roi": 123.53943369763127,
+    "meta_spend_change": 255.88475144353086,
+    "meta_revenue_change": 43.57852946154657,
+    "meta_roi_change": -59.65589172360802,
+    "kakao_w3_spend": 888279.0,
+    "kakao_w4_spend": 522005.0,
+    "kakao_w3_revenue": 3011987.0,
+    "kakao_w4_revenue": 1859327.0,
+    "kakao_spend_change": -41.23411675836083,
+    "kakao_revenue_change": -38.26908947482177,
+    "email_clean_aov": 20543.173158425834,
+    "email_outlier_aov": 196645.7743902439,
+    "email_outlier_aov_multiple": 9.572317425051208
+  }
+}
